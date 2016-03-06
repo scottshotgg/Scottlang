@@ -8,12 +8,14 @@ char lexeme[100];
 int lexLength;
 int token;
 int nextToken;
+int hasDecimal = 0;
 FILE *file_reader, *fopen();
 
 
 
 #define ALPHA		0
 #define DIGIT		1
+#define DECIMAL		2
 #define OTHER		99
 
 #define INT			10
@@ -26,8 +28,7 @@ FILE *file_reader, *fopen();
 #define DIV_OP		24
 #define LEFT_PAREN	25
 #define	RIGHT_PAREN	26
-#define END_OP		27
-#define DECIMAL		28
+#define END_OP		27 
 
 
 
@@ -134,22 +135,36 @@ int lex() {
 		case DIGIT:
 			addChar();
 			getChar();
-			while (nextCharType == DIGITgit  || DECIMAL) {
+			while (nextCharType == DIGIT || nextCharType == DECIMAL) {
+				if(nextCharType == DECIMAL) {
+					if(hasDecimal == 1) {
+						return -2;
+					}
+					nextToken = FLOAT;
+					hasDecimal = 1;
+				}
+				else {
+					if(hasDecimal == 1)
+						nextToken = FLOAT;
+					else
+						nextToken = INT;
+				}
 				addChar();
 				getChar();
 			}
-			nextToken = DIGIT;
+			hasDecimal = 0;
 			break;
 
-		/*case DECIMAL:
+		case DECIMAL:
 			addChar();
 			getChar();
 			while(nextCharType == DIGIT) {
 				addChar();
 				getChar();
 			}
+
 			nextToken = FLOAT;
-			break;*/
+			break;
 
 		case OTHER:
 			lookupTable(nextChar);
@@ -165,7 +180,8 @@ int lex() {
 			break;
 
 		default:
-			printf("Syntax error");		// add some more shit here to tell the plebs where they went wrong and stuff
+			printf("Syntax error");		// add some more shit here to tell the plebs w
+										// here they went wrong and stuff
 	}
 
 	printf("Next token is: %d	Next lexeme is: %s\n", nextToken, lexeme);
@@ -184,7 +200,11 @@ int main(int argc, char *argv[]) {
 			//	lex();
 			//}
 			do {
-				lex();
+				int error = lex();
+				if(error == -2) {
+					printf("Syntax error: More than one decimal in float constant\n");
+					return -2;
+				}
 			} while(nextChar != EOF);
 		}
 	}
