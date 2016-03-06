@@ -18,6 +18,7 @@ FILE *file_reader, *fopen();
 
 #define INT			10
 #define VAR			11
+#define FLOAT		12
 #define ASSIGN_OP	20
 #define ADD_OP		21
 #define SUB_OP		22
@@ -25,6 +26,8 @@ FILE *file_reader, *fopen();
 #define DIV_OP		24
 #define LEFT_PAREN	25
 #define	RIGHT_PAREN	26
+#define END_OP		27
+#define DECIMAL		28
 
 
 
@@ -52,7 +55,7 @@ void addChar() {
 		lexeme[lexLength] = 0;
 	}
 	else {
-		printf("Error: Maximum of 98 chars per lexeme!\n");
+		printf("Error: Maximum of 1000 chars per lexeme!\n");
 	}
 }
 
@@ -88,6 +91,22 @@ int lookupTable(char unkownChar) {
 			nextToken = DIV_OP;
 			break;
 
+		case ';':
+			addChar();
+			nextToken = END_OP;
+			break;
+
+		case '=':
+			addChar();
+			nextToken = ASSIGN_OP;
+			break;
+
+		case '.':
+			addChar();
+			nextToken = DECIMAL;
+			break;
+
+
 		default:
 			addChar();
 			nextToken = EOF;
@@ -118,11 +137,21 @@ int lex() {
 		case DIGIT:
 			addChar();
 			getChar();
-			while (nextCharType == DIGIT) {
+			while (nextCharType == DIGIT || nextCharType == DECIMAL) {
 				addChar();
 				getChar();
 			}
 			nextToken = INT;
+			break;
+
+		case DECIMAL:
+			addChar();
+			getChar();
+			while(nextCharType == DIGIT) {
+				addChar();
+				getChar();
+			}
+			nextToken = FLOAT;
 			break;
 
 		case OTHER:
@@ -137,6 +166,9 @@ int lex() {
 			lexeme[2] = 'F';
 			lexeme[3] = '\0';
 			break;
+
+		default:
+			printf("Syntax error");		// add some more shit here to tell the plebs where they went wrong and stuff
 	}
 
 	printf("Next token is: %d	Next lexeme is: %s\n", nextToken, lexeme);
