@@ -40,6 +40,9 @@ void getChar() {
 		else if(isdigit(nextChar)) {
 			nextCharType = DIGIT;
 		}
+		else if(nextChar == '.') {
+			nextCharType = DECIMAL;
+		}
 		else {
 			nextCharType = OTHER;
 		}
@@ -101,12 +104,6 @@ int lookupTable(char unkownChar) {
 			nextToken = ASSIGN_OP;
 			break;
 
-		case '.':
-			addChar();
-			nextToken = DECIMAL;
-			break;
-
-
 		default:
 			addChar();
 			nextToken = EOF;
@@ -137,14 +134,14 @@ int lex() {
 		case DIGIT:
 			addChar();
 			getChar();
-			while (nextCharType == DIGIT || nextCharType == DECIMAL) {
+			while (nextCharType == DIGITgit  || DECIMAL) {
 				addChar();
 				getChar();
 			}
-			nextToken = INT;
+			nextToken = DIGIT;
 			break;
 
-		case DECIMAL:
+		/*case DECIMAL:
 			addChar();
 			getChar();
 			while(nextCharType == DIGIT) {
@@ -152,7 +149,7 @@ int lex() {
 				getChar();
 			}
 			nextToken = FLOAT;
-			break;
+			break;*/
 
 		case OTHER:
 			lookupTable(nextChar);
