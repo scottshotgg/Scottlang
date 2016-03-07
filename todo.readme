@@ -1,0 +1,16 @@
+add in comments
+
+add in atleast the recognization of type declaration
+	- could try doing type checking based on token matching and expectation values
+
+add quotes (" ") and commas (' ') for strings and commas respectively
+
+add in private/public capitalization recognization
+
+finish vector dot operators
+
+finish op-equals operators
+
+add dynamic typing
+
+add function declarations, first class or no?
