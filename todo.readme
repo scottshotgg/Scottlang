@@ -14,3 +14,6 @@ finish op-equals operators
 add dynamic typing
 
 add function declarations, first class or no?
+
+make an interpreter that starts when provided < 2 arguments instead of a file
+	make a website where this can work

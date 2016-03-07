@@ -2,13 +2,15 @@
 #include <ctype.h>
 
 
-int nextChar;
-int nextCharType;
 char lexeme[100];
-int lexLength;
-int token;
-int nextToken;
-int hasDecimal = 0;
+
+int nextChar		= 0;
+int nextCharType	= 0;
+int lexLength		= 0;
+int token			= 0;
+int nextToken		= 0;
+int hasDecimal 		= 0;
+
 FILE *file_reader, *fopen();
 
 
@@ -22,40 +24,43 @@ FILE *file_reader, *fopen();
 #define ALPHA				0
 #define DIGIT				1
 #define DECIMAL				2
-#define OTHER				99
+#define OTHER				3
 
 
 /* Types */
-#define INT					10
-#define VAR					11
+
+#define VAR					10
+#define INT					11
 #define FLOAT				12
 #define CHAR				13
 #define STRING				14
 
 
 /* Operators */
-#define ASSIGN_OP			20
-#define ADD_OP				21
-#define SUB_OP				22
-#define MULT_OP				23
-#define DIV_OP				24
-#define ADD_ASSIGN_OP		28
-#define SUB_ASSIGN_OP		29
-#define MULT_ASSIGN_OP		30
-#define DIV_ASSIGN_OP		31
-#define DOT_ADD_OP			32
-#define DOT_MULT_OP			33
-#define DOT_SUB_OP			34
-#define DOT_DIV_OP			35
+#define ASSIGN_OP			30
+#define ADD_OP				31
+#define SUB_OP				32
+#define MULT_OP				33
+#define DIV_OP				34
+#define ADD_ASSIGN_OP		35
+#define SUB_ASSIGN_OP		36
+#define MULT_ASSIGN_OP		37
+#define DIV_ASSIGN_OP		38
+#define DOT_ADD_OP			39
+#define DOT_MULT_OP			40
+#define DOT_SUB_OP			41
+#define DOT_DIV_OP			42
 
 
 /* Grouping symbols */
-#define LEFT_PAREN			25
-#define	RIGHT_PAREN			26
+#define LEFT_PAREN			60
+#define	RIGHT_PAREN			61
+#define QUOTE				62
+#define COMMA				63
 
 
 /* End statement */
-#define END_STATEMENT		27 
+#define END_STATEMENT		99 
 
 
 
@@ -96,8 +101,8 @@ void addChar() {
 
 int lookupTable(char unkownChar) {
 	switch(unkownChar) {
-		case '(':
-			addChar();
+		case '(':			// Logic for function goes here
+			addChar();		// Need to use a push down automata to check whether these things pair up
 			nextToken = LEFT_PAREN;
 			break;
 
@@ -121,7 +126,7 @@ int lookupTable(char unkownChar) {
 			nextToken = MULT_OP;
 			break;
 
-		case '/':
+		case '/':				// Add Logic for the comments 
 			addChar();
 			nextToken = DIV_OP;
 			break;
@@ -134,6 +139,16 @@ int lookupTable(char unkownChar) {
 		case '=':
 			addChar();
 			nextToken = ASSIGN_OP;
+			break;
+
+		case '"':		
+			addChar();			// Add logic for strings
+			nextToken = QUOTE;
+			break;
+
+		case '\'':				// Add logic for chars
+			addChar();
+			nextToken = COMMA;
 			break;
 
 		default:
@@ -163,7 +178,7 @@ int lex() {
 			nextToken = VAR;
 			break;
 
-		case DIGIT:
+		case DIGIT:				// Decimal might be able to go into other and the logic would be there
 			addChar();
 			getChar();
 			while (nextCharType == DIGIT || nextCharType == DECIMAL) {
@@ -186,7 +201,7 @@ int lex() {
 			hasDecimal = 0;
 			break;
 
-		/*case DECIMAL:		// Don't think we need this, but I'll leave it anyways for now
+		case DECIMAL:		// Don't think we need this, but I'll leave it anyways for now
 			addChar();
 			getChar();
 			while(nextCharType == DIGIT) {
@@ -195,7 +210,7 @@ int lex() {
 			}
 
 			nextToken = FLOAT;
-			break;*/
+			break;
 
 		case OTHER:
 			lookupTable(nextChar);
