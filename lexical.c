@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 
 char lexeme[100];
@@ -9,7 +10,9 @@ int nextCharType	= 0;
 int lexLength		= 0;
 int token			= 0;
 int nextToken		= 0;
+
 int hasDecimal 		= 0;
+int hasLeftParen	= 0;
 
 FILE *file_reader, *fopen();
 
@@ -28,7 +31,6 @@ FILE *file_reader, *fopen();
 
 
 /* Types */
-
 #define VAR					10
 #define INT					11
 #define FLOAT				12
@@ -57,6 +59,7 @@ FILE *file_reader, *fopen();
 #define	RIGHT_PAREN			61
 #define QUOTE				62
 #define COMMA				63
+#define COMMENT				64
 
 
 /* End statement */
@@ -104,35 +107,79 @@ int lookupTable(char unkownChar) {
 		case '(':			// Logic for function goes here
 			addChar();		// Need to use a push down automata to check whether these things pair up
 			nextToken = LEFT_PAREN;
+			hasLeftParen++;
 			break;
 
 		case ')':
 			addChar();
-			nextToken = RIGHT_PAREN;
+			if(hasLeftParen > 0) {
+				hasLeftParen--;
+				nextToken = RIGHT_PAREN;
+			}
+			else{
+				nextToken = -3;
+				return -3;
+			}
 			break;
 
 		case '+':
 			addChar();
-			nextToken = ADD_OP;
+			getChar();
+			if(nextChar == '=') {
+				nextToken = ADD_ASSIGN_OP;
+				addChar();
+			}
+			else {
+				nextToken = ADD_OP;
+			}
 			break;
 
 		case '-':
 			addChar();
-			nextToken = SUB_OP;
+			getChar();
+			if(nextChar == '=') {
+				nextToken = SUB_ASSIGN_OP;
+				addChar();
+			}
+			else {
+				nextToken = SUB_OP;
+			}
 			break;
 
 		case '*':
 			addChar();
-			nextToken = MULT_OP;
+			getChar();
+			if(nextChar == '=') {
+				nextToken = MULT_ASSIGN_OP;
+				addChar();
+			}
+			else {
+				nextToken = MULT_OP;
+			}
 			break;
 
-		case '/':				// Add Logic for the comments 
+		case '/':				// Add Logic for the comments
 			addChar();
-			nextToken = DIV_OP;
+			getChar();
+			if(nextChar == '/') {
+				while(nextChar != '\n' && nextChar != -1) {
+					addChar();
+					getChar();
+				}
+				nextToken = COMMENT;
+			}
+			else if(nextChar == '=') {
+				nextToken = DIV_ASSIGN_OP;
+				addChar();
+			}
+			else {
+				nextToken = DIV_OP;
+			}
 			break;
 
 		case ';':
 			addChar();
+			// make a printf for this that will print the semicolon and then the newline
 			nextToken = END_STATEMENT;
 			break;
 
@@ -201,13 +248,21 @@ int lex() {
 			hasDecimal = 0;
 			break;
 
-		case DECIMAL:		// Don't think we need this, but I'll leave it anyways for now
+		case DECIMAL:
 			addChar();
 			getChar();
-			while(nextCharType == DIGIT) {
-				addChar();
-				getChar();
+
+			if(hasDecimal) {
+				return -2;
 			}
+			else
+				while(nextCharType == DIGIT) {			// need to add f for floats here
+					addChar();
+					getChar();
+					if(nextChar == '.') {
+						return -2;
+					}
+				}
 
 			nextToken = FLOAT;
 			break;
@@ -240,7 +295,7 @@ int main(int argc, char *argv[]) {
 	//int me = dummyFunc;
 
 	//printf("%d\n\n\n\n", me);
-
+	printf("\n");
 
 	if(argc > 2) {
 		if((file_reader = fopen(argv[1], "r")) == NULL) {
@@ -252,12 +307,19 @@ int main(int argc, char *argv[]) {
 			//	lex();
 			//}
 			do {
-				int error = lex();
+				int error = lex();			// make the erroring more consistent,
+											// right now we can throw errors from anywhere
+				// make this a switch later when we have more errors
+				// we also should return the line atleast, possibly the char
 				if(error == -2) {
 					printf("Syntax error: More than one decimal in float constant\n");
 					return -2;		// this should change, figure out a way to continue parsing 
 									// and then collect all errors at the end and display those 
 									// at the end
+				}
+				else if(error == -3) {
+					printf("Syntax error: No matching left parenthesis for right parenthesis\n");
+					return -3;
 				}
 			} while(nextChar != EOF);
 
