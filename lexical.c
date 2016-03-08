@@ -101,6 +101,7 @@ void addChar() {
 	}
 	else {
 		printf("Error: Maximum of 1000 chars per lexeme!\n");
+		exit(-1);
 	}
 }
 
@@ -197,9 +198,17 @@ int lookupTable(char unkownChar) {
 			int strLen = 0;
 			getChar();
 			while(nextChar != '"') {
-				strLen++;
-				addChar();
-				getChar();
+				if(nextChar == '\\') {
+					strLen++;				
+					getChar();
+					addChar();
+					getChar();
+				}
+				else {	
+					strLen++;
+					addChar();
+					getChar();
+				}
 			}
 			// addChar();		// make this something that we can pass something to, too lazy now
 			//lexeme[lexLength++] = strLen;
@@ -212,14 +221,21 @@ int lookupTable(char unkownChar) {
 			break;
 
 		case '\'':				// needs error checking and escape sequences
-			addChar();
 			getChar();
-			addChar();
-			getChar();
-			if(nextChar == '\'') {
+			if(nextChar == '\\') {
+				getChar();
 				addChar();
 			}
-			nextToken = CHAR;
+			else {
+				addChar();
+			}
+
+			getChar();
+			if(nextChar == '\'') {	
+				nextToken = CHAR;
+			}
+			nextToken = CHAR; 		// do something with this later
+			// maybe we should make the tokens be the errors if one does occur
 			break;
 
 		default:
@@ -323,7 +339,7 @@ int main(int argc, char *argv[]) {
 
 	if(argc > 2) {
 		if((file_reader = fopen(argv[1], "r")) == NULL) {
-			printf("Program \"%s\" does not exist\n", argv[1]);
+			printf("Program \"%s\" does not exist\n\n", argv[1]);
 		}
 		else {
 			getChar();
@@ -336,21 +352,22 @@ int main(int argc, char *argv[]) {
 				// make this a switch later when we have more errors
 				// we also should return the line atleast, possibly the char
 				if(error == -2) {
-					printf("Syntax error: More than one decimal in float constant\n");
+					printf("Syntax error: More than one decimal in float constant\n\n");
 					return -2;		// this should change, figure out a way to continue parsing 
 									// and then collect all errors at the end and display those 
 									// at the end
 				}
 				else if(error == -3) {
-					printf("Syntax error: No matching left parenthesis for right parenthesis\n");
+					printf("Syntax error: No matching left parenthesis for right parenthesis\n\n");
 					return -3;
 				}
 			} while(nextChar != EOF);
 
-			printf("\nParsing completed: no errors\n");
+			printf("\nParsing completed: no errors\n\n");
 		}
 	}
 	else {
-		printf("Not enough arguments; ./lexical [program_name] [debug]\n");
+		printf("Not enough arguments; ./lexical [program_file_name] [debug]\n");
+		printf("i.e, ./lexical program 0\n\n");
 	}
 }
