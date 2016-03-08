@@ -5,3 +5,7 @@ sum = (sum + 47.9) / total;
 -=
 *=
 /=
+'a'
+"a's"
+
+"this is a cool string"

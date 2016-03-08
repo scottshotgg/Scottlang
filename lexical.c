@@ -13,6 +13,8 @@ int nextToken		= 0;
 
 int hasDecimal 		= 0;
 int hasLeftParen	= 0;
+int hasLeftQuote	= 0;
+int hasLeftComma	= 0;
 
 FILE *file_reader, *fopen();
 
@@ -188,14 +190,36 @@ int lookupTable(char unkownChar) {
 			nextToken = ASSIGN_OP;
 			break;
 
-		case '"':		
-			addChar();			// Add logic for strings
-			nextToken = QUOTE;
+		case '"': 				// needs to be some error checking here, also needs to know how to escape things like another quote
+		{		
+			//addChar(); 		still trying to decide if I want to include the quotes in the string value, 
+								// this should be better abstracted later to include things like the length and stuff
+			int strLen = 0;
+			getChar();
+			while(nextChar != '"') {
+				strLen++;
+				addChar();
+				getChar();
+			}
+			// addChar();		// make this something that we can pass something to, too lazy now
+			//lexeme[lexLength++] = strLen;
+			//lexeme[lexLength] = 0;
+		}	
+
+			//addChar(); same as above
+
+			nextToken = STRING;
 			break;
 
-		case '\'':				// Add logic for chars
+		case '\'':				// needs error checking and escape sequences
 			addChar();
-			nextToken = COMMA;
+			getChar();
+			addChar();
+			getChar();
+			if(nextChar == '\'') {
+				addChar();
+			}
+			nextToken = CHAR;
 			break;
 
 		default:
