@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>ScottLang Interpreter</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="http://code.jquery.com/jquery-1.10.2.js" type="text/jscript"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/jscript"></script>
+	<link rel="stylesheet" type="text/css" href="resources/style.css">
+	<link rel="stylesheet" type="text/css" href="resources/jquery.terminal-0.9.3.css">
+	<script src="resources/jquery.terminal-0.9.3.js" type="text/jscript"></script>
+</head>
+<body>
+
+	<div id="term" class="terminal">
+	</div>
+
+	<script>
+	jQuery(function($, undefined) {
+    $('#term').terminal(function(command, term) {
+        if (command !== '') {
+            try {
+                var result = doCommandStuff(command);
+                if (result !== undefined) {
+                    term.echo(new String(result));
+                }
+            } catch(e) {
+                term.error(new String(e));
+            }
+        } else {
+           term.echo('');
+        }
+    }, 
+    {
+        greetings: 'ScottLang Interpreter\n',
+        name: 'sl_demo',
+        height: $(window).height(),
+        prompt: 'ScottLang> '});
+	});
+
+	function doCommandStuff(command) {
+		if(command === "ls") {
+			return "ls";
+		} else {
+			return "ks";
+		}
+	}
+
+
+	$('#term').resize(100, 100);
+	console.log($(window).width());
+
+	</script>
+
+</body>
+</html>
