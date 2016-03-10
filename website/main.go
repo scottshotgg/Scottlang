@@ -9,7 +9,13 @@ import (
 	"sync"
 	"strings"
 	"os/exec"
+	"io/ioutil"
 )
+
+type commandResponse struct {
+	Command string	`json:"command"`
+	Output string	`json:"output"`
+}
 
 type genericResponse struct {
 	Success bool   `json:"success"`
@@ -35,8 +41,8 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 }
 
-func exe_cmd(cmd string, wg *sync.WaitGroup) {
-	fmt.Println("command is ",cmd)
+func exe_cmd(cmd string, wg *sync.WaitGroup) (ss string) {
+	fmt.Println("command is ", cmd)
 	// splitting head => g++ parts => rest of the command
 	parts := strings.Fields(cmd)
 	head := parts[0]
@@ -46,15 +52,47 @@ func exe_cmd(cmd string, wg *sync.WaitGroup) {
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
-	fmt.Printf("%s", out)
+	//fmt.Printf("%s", out)
 	wg.Done() // Need to signal to waitgroup that this goroutine is done
+
+	ss = string(out[:len(out)])
+
+	return
 }
 
 func app(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("in the function and shit")
 	r.ParseForm()
 	log.Println(r.Form)
-	response, _ := json.Marshal(genericResponse{Success: true})
+
+	//addPresetRequest := &addPresetData{}
+	//err := json.NewDecoder(r.Body).Decode(addPresetRequest)
+
+	log.Println(r.Form["commmand"])
+
+
+	//d1 := []byte("")
+    //errr := ioutil.WriteFile("../program1", d1, 0644)
+    //check(errr)
+
+
+	log.Println("Lexing command....")
+	var wg sync.WaitGroup
+    wg.Add(1)
+	exe_cmd("gcc ../lexical.c -o ../lexical", &wg)			// this will not need to run everytime
+	wg.Add(1)
+	out := exe_cmd("./../lexical ../program1 0", &wg)		// for now dont modify it, but later we 
+															// should modify so that something in 
+															// quotes will be interpreted differently
+	log.Println("Done lexing the command!")
+
+	stringy, err := ioutil.ReadFile("../program")
+	s := string(stringy[:len(stringy)])
+
+	log.Println("\n\n" + s, err, out)
+
+
+	response, _ := json.Marshal(commandResponse{Command: s, Output: out})
 	w.Write(response)
 
 }
@@ -95,22 +133,8 @@ func (this GenericHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 func main() {
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources")))) 
 	http.HandleFunc("/", hello)
-	//http.Handle("/app", GenericHandler{GET: app})
-	http.HandleFunc("/app", app)
-
-	var wg sync.WaitGroup
-    wg.Add(1)
-   /* wg.Add(1)
-    go dosomething(400, &wg)
-    wg.Add(1)
-    go dosomething(150, &wg)
-    wg.Add(1)
-    go dosomething(600, &wg)
-
-    wg.Wait()
-    fmt.Println("Done")*/
-
-	exe_cmd("./../lexical ../program 0", &wg)
+	http.Handle("/app", GenericHandler{PUT: app})			/// I might do this, kinda weird though
+	//http.HandleFunc("/app", app)
 	http.ListenAndServe(":8080", nil)
 
 }

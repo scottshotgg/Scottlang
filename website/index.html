@@ -42,14 +42,17 @@
 	function doCommandStuff(command) {
 		$.ajax({
 			url: '/app',
+			//dataType: 'json',
+			//async: false,			// this causes an XHR thingy o nthe main UI thread and XHTML does not like that
+			//typoe: 'put',
 			data: {
-				success: 'response'
+				command: command
 			},
 			error: function(data) {
 				console.log(data);
 				console.log("u suck at programin fggt");
 			},
-			dataType: 'jsonp',
+			dataType: 'json',
 			success: function(data) {
 				console.log(data);
 			},
