@@ -16,6 +16,7 @@
 	</div>
 
 	<script>
+
 	jQuery(function($, undefined) {
     $('#term').terminal(function(command, term) {
         if (command !== '') {
@@ -39,6 +40,21 @@
 	});
 
 	function doCommandStuff(command) {
+		$.ajax({
+			url: '/app',
+			data: {
+				success: 'response'
+			},
+			error: function(data) {
+				console.log(data);
+				console.log("u suck at programin fggt");
+			},
+			dataType: 'jsonp',
+			success: function(data) {
+				console.log(data);
+			},
+			type: 'PUT'
+		});
 		if(command === "ls") {
 			return "ls";
 		} else {
