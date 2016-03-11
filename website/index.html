@@ -22,8 +22,9 @@
         if (command !== '') {
             try {
                 var result = doCommandStuff(command);
+                console.log(command);
                 if (result !== undefined) {
-                    term.echo(new String(result));
+                    term.echo(result);
                 }
             } catch(e) {
                 term.error(new String(e));
@@ -40,28 +41,36 @@
 	});
 
 	function doCommandStuff(command) {
+		var error = 0;
+		var returnData = {};
+		var output = "";
+
 		$.ajax({
 			url: '/app',
 			//dataType: 'json',
-			//async: false,			// this causes an XHR thingy o nthe main UI thread and XHTML does not like that
+			async: false,			// this causes an XHR thingy on the main UI thread and XHTML does not like that but whatever, too lazy to deal with async AJAX right now
 			//typoe: 'put',
 			data: {
 				command: command
 			},
 			error: function(data) {
-				console.log(data);
 				console.log("u suck at programin fggt");
+				error = 1;
 			},
 			dataType: 'json',
 			success: function(data) {
+				//returnData = data.clone();
+				//output = $.extend(true, {}, data.output);
+				output = new String(data.output);
 				console.log(data);
 			},
 			type: 'PUT'
 		});
-		if(command === "ls") {
-			return "ls";
+		
+		if(!error) {
+			return output;
 		} else {
-			return "ks";
+			return "ks";			// this needs to change but later when im not lazy enough to leave it there
 		}
 	}
 

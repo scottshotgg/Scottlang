@@ -1,11 +1,1 @@
-sum = (sum + 47.9) / total;
-sum = (sum + 47.9) / total;
-// this is a comment
-+=
--=
-*=
-/=
-'\"'
-"a's"
-
-"this is a cool string\""
+[sum = (sum + 47.9) / total;]

@@ -17,6 +17,10 @@ type commandResponse struct {
 	Output string	`json:"output"`
 }
 
+type commandRequest struct {
+	Command string `json:"command"`
+}
+
 type genericResponse struct {
 	Success bool   `json:"success"`
 }
@@ -42,6 +46,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func exe_cmd(cmd string, wg *sync.WaitGroup) (ss string) {
+
 	fmt.Println("command is ", cmd)
 	// splitting head => g++ parts => rest of the command
 	parts := strings.Fields(cmd)
@@ -61,27 +66,38 @@ func exe_cmd(cmd string, wg *sync.WaitGroup) (ss string) {
 }
 
 func app(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("in the function and shit")
+
+	//request := &commandRequest{}
+	//thisisanerror := json.NewDecoder(r.Body).Decode(request)
+
+	//fmt.Println("in the function and shit", thisisanerror)
 	r.ParseForm()
-	log.Println(r.Form)
+	//log.Println(request)
 
 	//addPresetRequest := &addPresetData{}
 	//err := json.NewDecoder(r.Body).Decode(addPresetRequest)
-
-	log.Println(r.Form["commmand"])
+	stringthing := r.Form["commmand"]
+	log.Println(stringthing)
 
 
 	//d1 := []byte("")
     //errr := ioutil.WriteFile("../program1", d1, 0644)
     //check(errr)
 
+    //me := "./../lexical \"[" + r.Form["command"] + "]\" 0"
+
+    // use a more efficient one later, too lazy right now to deal with that parsing each char shit, i hate golang for this stuff
+
+    me := fmt.Sprintf("./../lexical %s 0", r.Form["command"])
+
+	log.Println(me)
 
 	log.Println("Lexing command....")
 	var wg sync.WaitGroup
     wg.Add(1)
 	exe_cmd("gcc ../lexical.c -o ../lexical", &wg)			// this will not need to run everytime
 	wg.Add(1)
-	out := exe_cmd("./../lexical ../program1 0", &wg)		// for now dont modify it, but later we 
+	out := exe_cmd(me, &wg)		// for now dont modify it, but later we 
 															// should modify so that something in 
 															// quotes will be interpreted differently
 	log.Println("Done lexing the command!")
@@ -131,6 +147,7 @@ func (this GenericHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources")))) 
 	http.HandleFunc("/", hello)
 	http.Handle("/app", GenericHandler{PUT: app})			/// I might do this, kinda weird though

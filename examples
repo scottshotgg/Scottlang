@@ -1,0 +1,1 @@
+gcc lexical.c -o lexical && ./lexical "[sum = (sum + 47.9) / total;]" 0

@@ -1,22 +1,28 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 char lexeme[100];
 
-int nextChar		= 0;
-int nextCharType	= 0;
-int lexLength		= 0;
-int token			= 0;
-int nextToken		= 0;
+int nextChar			= 0;
+int nextCharType		= 0;
+int lexLength			= 0;
+int token				= 0;
+int nextToken			= 0;
 
-int hasDecimal 		= 0;
-int hasLeftParen	= 0;
-int hasLeftQuote	= 0;
-int hasLeftComma	= 0;
+char **directString;
+int directStringEnabled	= 0;
+int directStringIndex 	= 0;
+int directStringLength  = 0;
+
+int hasDecimal 			= 0;
+int hasLeftParen		= 0;
+int hasLeftQuote		= 0;
+int hasLeftComma		= 0;
 
 FILE *file_reader, *fopen();
+FILE *file_writer, *fopen();
 
 
 /*	
@@ -75,7 +81,15 @@ int dummyFunc() {
 
 
 void getChar() {
+	/*if(directStringEnabled) {
+		nextChar = 'd';
+	}
+	else {
+		nextChar = getc(file_reader);
+	}
+	if(nextChar != EOF && nextChar != '\0') {*/		// taking out for fucky string shit
 	if((nextChar = getc(file_reader)) != EOF) {
+		//nextChar = getc(file_reader)
 		if(isalpha(nextChar)) {
 			nextCharType = ALPHA;
 		}
@@ -330,40 +344,78 @@ int lex() {
 	return nextToken;
 }
 
+int lexingFunction() {		// maybe this should return the error, idk
+	getChar();
+	//while(nextChar != EOF) {
+	//	lex();
+	//}
+	do {
+		int error = lex();			// make the erroring more consistent,
+									// right now we can throw errors from anywhere
+		// make this a switch later when we have more errors
+		// we also should return the line atleast, possibly the char
+		if(error == -2) {
+			printf("Syntax error: More than one decimal in float constant\n\n");
+			return -2;		// this should change, figure out a way to continue parsing 
+							// and then collect all errors at the end and display those 
+							// at the end
+		}
+		else if(error == -3) {
+			printf("Syntax error: No matching left parenthesis for right parenthesis\n\n");
+			return -3;
+		}
+	} while(nextChar != EOF);
+
+	printf("\nParsing completed: no errors\n\n");
+
+	return 0;
+}
+
 int main(int argc, char *argv[]) {
 
-	//int me = dummyFunc;
-
-	//printf("%d\n\n\n\n", me);
 	printf("\n");
 
+	printf("%c", (argv[1][0]));
+	printf("%c\n", (argv[1][strlen(argv[1]) - 1]));
+
+
 	if(argc > 2) {
-		if((file_reader = fopen(argv[1], "r")) == NULL) {
-			printf("Program \"%s\" does not exist\n\n", argv[1]);
+		// later when i feel like it we can make this shit work nice and have cool syntax for the command line arguments
+		// we also need to check and make sure that the string length isnt 0 but im too lazy now
+		if(argv[1][0] == '[' && argv[1][strlen(argv[1]) - 1] == ']') {		// if its a single string in [ ] then just write it to a file like a pleb
+
+			printf("writing to file");
+
+			/*directStringEnabled = 1;										// take all this dynamic string shit out and just write it to a file and then reopen it; the easy way
+			for(int i = 0; i < strlen(argv[1]); i++) {
+				directStringLength++;
+			}
+			**directString = malloc(directStringLength * sizeof(char*));
+
+			for(int i = 0; i < strlen(argv[1]); i++) {
+				directString = ;
+			}
+
+			lexingFunction();
+
+		*/
+			file_writer = fopen("program", "w");
+
+			fputs(argv[1], file_writer);
+
+			fclose(file_writer);
+
+			file_reader = fopen("program", "r");
+
+			lexingFunction();
 		}
 		else {
-			getChar();
-			//while(nextChar != EOF) {
-			//	lex();
-			//}
-			do {
-				int error = lex();			// make the erroring more consistent,
-											// right now we can throw errors from anywhere
-				// make this a switch later when we have more errors
-				// we also should return the line atleast, possibly the char
-				if(error == -2) {
-					printf("Syntax error: More than one decimal in float constant\n\n");
-					return -2;		// this should change, figure out a way to continue parsing 
-									// and then collect all errors at the end and display those 
-									// at the end
-				}
-				else if(error == -3) {
-					printf("Syntax error: No matching left parenthesis for right parenthesis\n\n");
-					return -3;
-				}
-			} while(nextChar != EOF);
-
-			printf("\nParsing completed: no errors\n\n");
+			if((file_reader = fopen(argv[1], "r")) == NULL) {
+				printf("Program \"%s\" does not exist\n\n", argv[1]);
+			}
+			else {
+				lexingFunction();
+			}
 		}
 	}
 	else {
