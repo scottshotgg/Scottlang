@@ -9,7 +9,12 @@ import (
 	"sync"
 	"strings"
 	"os/exec"
+	"os"
 	"io/ioutil"
+	"strconv"
+
+		// this is for the live server version to determine what directory 
+				// it needs to use and where it is in relation to the lexer
 )
 
 type commandResponse struct {
@@ -30,6 +35,11 @@ type GenericHandler struct {
 	PUT  func(http.ResponseWriter, *http.Request)
 	POST func(http.ResponseWriter, *http.Request)
 }
+
+
+var live int = 0
+
+
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	templatePath := fmt.Sprintf("index.html")
@@ -114,6 +124,11 @@ func app(w http.ResponseWriter, r *http.Request) {
 
     stringForCommand := []string{"gcc", "./../lexical", "-o lexical"}
 
+    if(live == 1) {
+    stringForCommand = []string{"gcc", "./lexical", "-o lexical"}
+    }
+
+
 	exe_cmd(stringForCommand, &wg)			// this will not need to run everytime
 	wg.Add(1)
 
@@ -132,12 +147,19 @@ func app(w http.ResponseWriter, r *http.Request) {
 	out := exe_cmd(stringForCommand, &wg)		// for now dont modify it, but later we 
 															// should modify so that something in 
 															// quotes will be interpreted differently
+
 	log.Println("Done lexing the command!")
 
-	stringy, err := ioutil.ReadFile("../program")
+	var stringy []byte
+
+	if(live == 1) {
+		stringy, _ = ioutil.ReadFile("program")
+    } else {
+    	stringy, _ = ioutil.ReadFile("../program")
+    }
 	s := string(stringy[:len(stringy)])
 
-	log.Println("\n\n" + s, err, out)
+	log.Println("\n\n" + s, out)
 
 
 	response, _ := json.Marshal(commandResponse{Command: s, Output: out})
@@ -179,6 +201,14 @@ func (this GenericHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	
+    fmt.Println(len(os.Args), os.Args)
+
+    log.Println(os.Args[2])
+
+    live, _ = strconv.Atoi(os.Args[2])
+    //live = i
+
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources")))) 
 	http.HandleFunc("/", hello)
