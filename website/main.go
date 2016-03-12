@@ -216,6 +216,6 @@ func main() {
 	http.HandleFunc("/", hello)
 	http.Handle("/app", GenericHandler{PUT: app})			/// I might do this, kinda weird though
 	//http.HandleFunc("/app", app)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", nil)			// switch this to 80 later
 
 }
