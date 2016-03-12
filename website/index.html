@@ -19,6 +19,7 @@
 
 	jQuery(function($, undefined) {
     $('#term').terminal(function(command, term) {
+    	console.log(command);
         if (command !== '') {
             try {
                 var result = doCommandStuff(command);
@@ -37,7 +38,8 @@
         greetings: 'ScottLang Interpreter\n',
         name: 'sl_demo',
         height: $(window).height(),
-        prompt: 'ScottLang> '});
+        prompt: 'ScottLang> ',
+    	size: 100 });
 	});
 
 	function doCommandStuff(command) {
@@ -46,12 +48,15 @@
 		var output = "";
 
 		$.ajax({
+			type: 'PUT',
 			url: '/app',
 			//dataType: 'json',
-			async: false,			// this causes an XHR thingy on the main UI thread and XHTML does not like that but whatever, too lazy to deal with async AJAX right now
+			async: false,			// this causes an XHR thingy on the main UI thread and XHTML does not 
+									// like that but whatever, too lazy to deal with async AJAX right now
 			//typoe: 'put',
 			data: {
-				command: command
+				//null:false,
+				commandToParse: command
 			},
 			error: function(data) {
 				console.log("u suck at programin fggt");
@@ -63,8 +68,7 @@
 				//output = $.extend(true, {}, data.output);
 				output = new String(data.output);
 				console.log(data);
-			},
-			type: 'PUT'
+			}
 		});
 		
 		if(!error) {

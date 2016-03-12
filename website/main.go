@@ -18,7 +18,7 @@ type commandResponse struct {
 }
 
 type commandRequest struct {
-	Command string `json:"command"`
+	Command string `json:"commandToParse"`
 }
 
 type genericResponse struct {
@@ -41,15 +41,18 @@ func hello(w http.ResponseWriter, r *http.Request) {
 		w.Write(response)
 		return
 	}
-	log.Println("executing...");
+	log.Println("executing ...");
 	t.Execute(w, nil)
 }
 
-func exe_cmd(cmd string, wg *sync.WaitGroup) (ss string) {
+func exe_cmd(parts []string, wg *sync.WaitGroup) (ss string) {
 
-	fmt.Println("command is ", cmd)
+	fmt.Println("command is ", parts)
 	// splitting head => g++ parts => rest of the command
-	parts := strings.Fields(cmd)
+	//parts := strings.Fields(cmd)
+
+	//log.Println(parts)
+
 	head := parts[0]
 	parts = parts[1:len(parts)]
 
@@ -67,17 +70,21 @@ func exe_cmd(cmd string, wg *sync.WaitGroup) (ss string) {
 
 func app(w http.ResponseWriter, r *http.Request) {
 
-	//request := &commandRequest{}
-	//thisisanerror := json.NewDecoder(r.Body).Decode(request)
+	/*request := &commandRequest{}
 
-	//fmt.Println("in the function and shit", thisisanerror)
+	log.Println(r.Body)
+
+	thisisanerror := json.NewDecoder(r.Body).Decode(request)
+
+	fmt.Println("in the function and shit", thisisanerror)
+	
+	log.Println(request.Command)*/
 	r.ParseForm()
-	//log.Println(request)
 
 	//addPresetRequest := &addPresetData{}
 	//err := json.NewDecoder(r.Body).Decode(addPresetRequest)
-	stringthing := r.Form["commmand"]
-	log.Println(stringthing)
+	//stringthing := r.Form["commmand"]
+	//log.Println(stringthing)
 
 
 	//d1 := []byte("")
@@ -88,16 +95,41 @@ func app(w http.ResponseWriter, r *http.Request) {
 
     // use a more efficient one later, too lazy right now to deal with that parsing each char shit, i hate golang for this stuff
 
-    me := fmt.Sprintf("./../lexical %s 0", r.Form["command"])
+
+    me := fmt.Sprintf("%s", r.Form["commandToParse"])
 
 	log.Println(me)
+
+    amount := len(strings.Split(me, " "))
+
+    if(amount > 3) {
+    	me = fmt.Sprintf("%s", r.Form["commandToParse"])
+    }
+
+    log.Println(me);
 
 	log.Println("Lexing command....")
 	var wg sync.WaitGroup
     wg.Add(1)
-	exe_cmd("gcc ../lexical.c -o ../lexical", &wg)			// this will not need to run everytime
+
+    stringForCommand := []string{"gcc", "./../lexical", "-o lexical"}
+
+	exe_cmd(stringForCommand, &wg)			// this will not need to run everytime
 	wg.Add(1)
-	out := exe_cmd(me, &wg)		// for now dont modify it, but later we 
+
+//	stringForCommandAmount := (len(r.Form["command"]))
+
+	command := append([]string{}, r.Form["command"]...)
+
+	log.Println(command)
+
+	//command := string(byte(r.Form["command"])[:stringForCommandAmount])
+
+	stringForCommand[0] = stringForCommand[1]
+	stringForCommand[1] = me
+	stringForCommand[2] = "0"
+
+	out := exe_cmd(stringForCommand, &wg)		// for now dont modify it, but later we 
 															// should modify so that something in 
 															// quotes will be interpreted differently
 	log.Println("Done lexing the command!")

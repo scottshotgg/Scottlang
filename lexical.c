@@ -383,8 +383,7 @@ int main(int argc, char *argv[]) {
 		// later when i feel like it we can make this shit work nice and have cool syntax for the command line arguments
 		// we also need to check and make sure that the string length isnt 0 but im too lazy now
 		if(argv[1][0] == '[' && argv[1][strlen(argv[1]) - 1] == ']') {		// if its a single string in [ ] then just write it to a file like a pleb
-
-			printf("writing to file");
+			
 
 			/*directStringEnabled = 1;										// take all this dynamic string shit out and just write it to a file and then reopen it; the easy way
 			for(int i = 0; i < strlen(argv[1]); i++) {
