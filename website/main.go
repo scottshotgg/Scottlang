@@ -211,10 +211,14 @@ func main() {
     log.Println(os.Args[2])
 
     live, _ = strconv.Atoi(os.Args[2])
+    log.Println(os.Args[2])
 
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources")))) 
+    log.Println(os.Args[2])
 	http.HandleFunc("/", hello)
+    log.Println(os.Args[2])
 	http.Handle("/app", GenericHandler{PUT: app})			/// I might do this, kinda weird though
+    log.Println(os.Args[2])
 	//http.HandleFunc("/app", app)
 	http.ListenAndServe(":8080", nil)			// switch this to 80 later
 
