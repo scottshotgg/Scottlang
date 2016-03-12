@@ -75,7 +75,7 @@ func exe_cmd(parts []string, wg *sync.WaitGroup) (ss string) {
 
 	ss = string(out[:len(out)])
 
-	return
+	return 
 }
 
 func app(w http.ResponseWriter, r *http.Request) {
@@ -150,6 +150,8 @@ func app(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Done lexing the command!")
 
+	log.Println(stringForCommand)
+
 	var stringy []byte
 
 	if(live == 1) {
@@ -202,14 +204,14 @@ func (this GenericHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
     fmt.Println(len(os.Args), os.Args)
 
     log.Println(os.Args[2])
 
     live, _ = strconv.Atoi(os.Args[2])
-    //live = i
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources")))) 
 	http.HandleFunc("/", hello)
 	http.Handle("/app", GenericHandler{PUT: app})			/// I might do this, kinda weird though
