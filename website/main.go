@@ -66,7 +66,7 @@ func exe_cmd(parts []string, wg *sync.WaitGroup) (ss string) {
 	head := parts[0]
 	parts = parts[1:len(parts)]
 
-	out, err := exec.Command(head,parts...).Output()
+	out, err := exec.Command(head, parts...).Output()
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
