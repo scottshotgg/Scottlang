@@ -10,6 +10,7 @@ int nextCharType		= 0;
 int lexLength			= 0;
 int token				= 0;
 int nextToken			= 0;
+int lookupError			= 0;
 
 char **directString;
 int directStringEnabled	= 0;
@@ -21,6 +22,8 @@ int hasLeftParen		= 0;
 int hasLeftBracket		= 0;
 int hasLeftQuote		= 0;
 int hasLeftComma		= 0;
+
+int statementEnded		= 0;
 
 FILE *file_reader, *fopen();
 FILE *file_writer, *fopen();
@@ -202,7 +205,7 @@ int lookupTable(char unkownChar) {
 			// make a printf for this that will print the semicolon and then the newline
 			nextToken = END_STATEMENT;
 
-			if(hasLeftParen || hasLeftBracket || hasLeftComma || hasLeftQuote) {
+			if(hasLeftParen > 0 || hasLeftBracket > 1 || hasLeftComma > 0 || hasLeftQuote > 0) {
 				return -4;
 			}
 
@@ -280,8 +283,14 @@ int lookupTable(char unkownChar) {
 
 		default:
 			addChar();
-			nextToken = EOF;
-			break;
+			printf("I am in here");
+			if(statementEnded) {
+				nextToken = EOF;		// just do this for now
+				break;
+			}
+			else {
+				return -99;
+			}
 	}
 
 	return nextToken;
@@ -348,16 +357,27 @@ int lex() {
 			break;
 
 		case OTHER:
-			lookupTable(nextChar);
+			lookupError = lookupTable(nextChar);
+			if(lookupError < 0) {
+				return lookupError;
+			}
 			getChar();
 			break;
 
 		case EOF:
-			nextToken = EOF;
-			lexeme[0] = 'E';
-			lexeme[1] = 'O';
-			lexeme[2] = 'F';
-			lexeme[3] = '\0';
+			if(statementEnded) {
+				nextToken = EOF;
+				lexeme[0] = 'E';
+				lexeme[1] = 'O';
+				lexeme[2] = 'F';
+				lexeme[3] = '\0';
+			}
+			else {
+				return -99;
+			}
+
+			
+
 			break;
 
 		default:
@@ -392,8 +412,11 @@ int lexingFunction() {		// maybe this should return the error, idk
 			case -4:
 				printf("Syntax error: No matching right grouping operator for recognized left grouping operator before statement terminated\n\n");
 				return -4;
-		}
 
+			case -99:
+				printf("Syntax error: Statement not terminated");
+				return -99;
+		}
 
 		if(error == -2) {
 			printf("Syntax error: More than one decimal in float constant\n\n");
