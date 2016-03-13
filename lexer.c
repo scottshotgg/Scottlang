@@ -239,6 +239,7 @@ int lex() {
 		case DIGIT:				// Decimal might be able to go into other and the logic would be there
 			addChar();
 			getChar();
+			nextToken = INT;
 			while (nextCharType == DIGIT || nextCharType == DECIMAL) {
 				if(nextCharType == DECIMAL) {
 					if(hasDecimal == 1) {
@@ -367,6 +368,7 @@ int main(int argc, char *argv[]) {
 
 	printf("\n");
 	printf("Statement being lexed: %s\n\n", (argv[1]));
+	//printf("%d", isalpha('2'));
 	//printf("%c\n", (argv[1][strlen(argv[1]) - 1]));
 
 	//printf("this is the string thing %s", argv[2]);

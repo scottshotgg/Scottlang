@@ -10,7 +10,7 @@ import (
 	"strings"
 	"os/exec"
 	"os"
-	"io/ioutil"
+	//"io/ioutil"
 	"strconv"
 
 		// this is for the live server version to determine what directory 
@@ -57,7 +57,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 
 func exe_cmd(parts []string, wg *sync.WaitGroup) (ss string) {
 
-	fmt.Println("command is ", parts)
+	log.Println("Command: ", parts)
 	// splitting head => g++ parts => rest of the command
 	//parts := strings.Fields(cmd)
 
@@ -135,14 +135,6 @@ func app(w http.ResponseWriter, r *http.Request) {
 	exe_cmd(stringForCommand, &wg)			// this will not need to run everytime
 	wg.Add(1)
 
-//	stringForCommandAmount := (len(r.Form["command"]))
-
-	command := append([]string{}, r.Form["command"]...)
-
-	log.Println(command)
-
-	//command := string(byte(r.Form["command"])[:stringForCommandAmount])
-
 	stringForCommand = []string{"./lexer", me, "1"}
 
 	if(live == 1) {
@@ -157,7 +149,7 @@ func app(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(stringForCommand)
 
-	var stringy []byte
+	/*var stringy []byte
 
 	if(live == 1) {
 		stringy, _ = ioutil.ReadFile("program")
@@ -166,10 +158,10 @@ func app(w http.ResponseWriter, r *http.Request) {
     }
 	s := string(stringy[:len(stringy)])
 
-	log.Println("\n\n" + s, out)
+	log.Println(s, out, "\n\n")
+*/
 
-
-	response, _ := json.Marshal(commandResponse{Command: s, Output: out})
+	response, _ := json.Marshal(commandResponse{Command: "", Output: out})
 	w.Write(response)
 
 }
@@ -213,18 +205,14 @@ func main() {
 
     fmt.Println(len(os.Args), os.Args)
 
-    log.Println(os.Args[2])
-
     live, _ = strconv.Atoi(os.Args[2])
-    log.Println(os.Args[2])
 
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources")))) 
-    log.Println(os.Args[2])
 	http.HandleFunc("/", hello)
-    log.Println(os.Args[2])
 	http.Handle("/app", GenericHandler{PUT: app})			/// I might do this, kinda weird though
-    log.Println(os.Args[2])
 	//http.HandleFunc("/app", app)
+	log.Printf("\n\n\n\n")
+
 	http.ListenAndServe(":8080", nil)			// switch this to 80 later
 
 }
