@@ -18,6 +18,7 @@ int directStringLength  = 0;
 
 int hasDecimal 			= 0;
 int hasLeftParen		= 0;
+int hasLeftBracket		= 0;
 int hasLeftQuote		= 0;
 int hasLeftComma		= 0;
 
@@ -65,9 +66,11 @@ FILE *file_writer, *fopen();
 /* Grouping symbols */
 #define LEFT_PAREN			60
 #define	RIGHT_PAREN			61
-#define QUOTE				62
-#define COMMA				63
-#define COMMENT				64
+#define RIGHT_BRACKET		62
+#define LEFT_BRACKET		63
+#define QUOTE				68
+#define COMMA				69
+#define COMMENT				70
 
 
 /* End statement */
@@ -198,6 +201,11 @@ int lookupTable(char unkownChar) {
 			addChar();
 			// make a printf for this that will print the semicolon and then the newline
 			nextToken = END_STATEMENT;
+
+			if(hasLeftParen || hasLeftBracket || hasLeftComma || hasLeftQuote) {
+				return -4;
+			}
+
 			break;
 
 		case '=':
@@ -250,6 +258,24 @@ int lookupTable(char unkownChar) {
 			}
 			nextToken = CHAR; 		// do something with this later
 			// maybe we should make the tokens be the errors if one does occur
+			break;
+
+		case '[':			// Logic for function goes here
+			addChar();		// Need to use a push down automata to check whether these things pair up
+			nextToken = LEFT_BRACKET;
+			hasLeftBracket++;
+			break;
+
+		case ']':
+			addChar();
+			if(hasLeftBracket > 0) {
+				hasLeftBracket--;
+				nextToken = RIGHT_BRACKET;
+			}
+			else{
+				nextToken = -3;
+				return -3;
+			}
 			break;
 
 		default:
@@ -354,6 +380,21 @@ int lexingFunction() {		// maybe this should return the error, idk
 									// right now we can throw errors from anywhere
 		// make this a switch later when we have more errors
 		// we also should return the line atleast, possibly the char
+		//printf("%d", error);
+
+		switch(error) {
+			case -2:
+				printf("Syntax error: More than one decimal in float constant\n\n");
+				return -2;
+			case -3:
+				printf("Syntax error: No matching left parenthesis for right parenthesis\n\n");
+				return -3;
+			case -4:
+				printf("Syntax error: No matching right grouping operator for recognized left grouping operator before statement terminated\n\n");
+				return -4;
+		}
+
+
 		if(error == -2) {
 			printf("Syntax error: More than one decimal in float constant\n\n");
 			return -2;		// this should change, figure out a way to continue parsing 
@@ -383,7 +424,7 @@ int main(int argc, char *argv[]) {
 		// later when i feel like it we can make this shit work nice and have cool syntax for the command line arguments
 		// we also need to check and make sure that the string length isnt 0 but im too lazy now
 		if(argv[1][0] == '[' && argv[1][strlen(argv[1]) - 1] == ']') {		// if its a single string in [ ] then just write it to a file like a pleb
-			
+
 
 			/*directStringEnabled = 1;										// take all this dynamic string shit out and just write it to a file and then reopen it; the easy way
 			for(int i = 0; i < strlen(argv[1]); i++) {
