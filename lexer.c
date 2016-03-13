@@ -97,11 +97,9 @@ void getChar() {
 	if((nextChar = getc(file_reader)) != EOF) {
 		//nextChar = getc(file_reader)
 		if(isalpha(nextChar)) {
-			printf("I got an alpha");
 			nextCharType = ALPHA;
 		}
 		else if(isdigit(nextChar)) {
-			printf("I got a digit");
 			nextCharType = DIGIT;
 		}
 		else if(nextChar == '.') {
@@ -112,7 +110,7 @@ void getChar() {
 		}
 	}
 	else {
-		if(statementEnded)
+		//if(statementEnded)
 			//error = -99;
 		nextCharType = EOF;
 	}
@@ -120,6 +118,7 @@ void getChar() {
 
 void addChar() {
 	if (lexLength <= 98) {
+		//printf("%c", nextChar);
 		lexeme[lexLength++] = nextChar;
 		lexeme[lexLength] = 0;
 	}
@@ -134,85 +133,36 @@ int lookupTable(char unkownChar) {
 		case '(':			// Logic for function goes here
 			addChar();		// Need to use a push down automata to check whether these things pair up
 			nextToken = LEFT_PAREN;
-			hasLeftParen++;
 			break;
 
 		case ')':
 			addChar();
-			if(hasLeftParen > 0) {
-				hasLeftParen--;
-				nextToken = RIGHT_PAREN;
-			}
-			else{
-				nextToken = -3;
-				return -3;
-			}
+			nextToken = RIGHT_PAREN;
 			break;
 
 		case '+':
 			addChar();
-			getChar();
-			if(nextChar == '=') {
-				nextToken = ADD_ASSIGN_OP;
-				addChar();
-			}
-			else {
-				nextToken = ADD_OP;
-			}
+			nextToken = ADD_OP;
 			break;
 
 		case '-':
 			addChar();
-			getChar();
-			if(nextChar == '=') {
-				nextToken = SUB_ASSIGN_OP;
-				addChar();
-			}
-			else {
-				nextToken = SUB_OP;
-			}
+			nextToken = SUB_OP;
 			break;
 
 		case '*':
 			addChar();
-			getChar();
-			if(nextChar == '=') {
-				nextToken = MULT_ASSIGN_OP;
-				addChar();
-			}
-			else {
-				nextToken = MULT_OP;
-			}
+			nextToken = MULT_OP;
 			break;
 
 		case '/':				// Add Logic for the comments
 			addChar();
-			getChar();
-			if(nextChar == '/') {
-				while(nextChar != '\n' && nextChar != -1) {
-					addChar();
-					getChar();
-				}
-				nextToken = COMMENT;
-			}
-			else if(nextChar == '=') {
-				nextToken = DIV_ASSIGN_OP;
-				addChar();
-			}
-			else {
-				nextToken = DIV_OP;
-			}
+			nextToken = DIV_OP;
 			break;
 
 		case ';':
 			addChar();
-			// make a printf for this that will print the semicolon and then the newline
 			nextToken = END_STATEMENT;
-
-			if(hasLeftParen > 0 || hasLeftBracket > 1 || hasLeftComma > 0 || hasLeftQuote > 0) {
-				return -4;
-			}
-
 			break;
 
 		case '=':
@@ -244,49 +194,25 @@ int lookupTable(char unkownChar) {
 			break;
 
 		case '\'':				// needs error checking and escape sequences
-			getChar();
-			if(nextChar == '\\') {
-				getChar();
-				addChar();
-			}
-			else {
-				addChar();
-			}
-
-			getChar();
-			if(nextChar == '\'') {	
-				nextToken = CHAR;
-			}
-			nextToken = CHAR; 		// do something with this later
+			addChar();	
+			nextToken = COMMA; 		// do something with this later
 			// maybe we should make the tokens be the errors if one does occur
 			break;
 
 		case '[':			// Logic for function goes here
 			addChar();		// Need to use a push down automata to check whether these things pair up
 			nextToken = LEFT_BRACKET;
-			hasLeftBracket++;
 			break;
 
 		case ']':
-			addChar();
-			if(hasLeftBracket > 0) {
-				hasLeftBracket--;
-				nextToken = RIGHT_BRACKET;
-			}
-			else {
-				return -3;
-			}
+			addChar();	
+			nextToken = RIGHT_BRACKET;
 			break;
 
 		default:
 			addChar();
-			if(statementEnded) {
-				nextToken = EOF;		// just do this for now
-				break;
-			}
-			else {
-				return -99;
-			}
+			nextToken = EOF;		// just do this for now
+			break;
 	}
 
 	return nextToken;
@@ -314,7 +240,6 @@ int lex() {
 			addChar();
 			getChar();
 			while (nextCharType == DIGIT || nextCharType == DECIMAL) {
-				printf("I'm in");
 				if(nextCharType == DECIMAL) {
 					if(hasDecimal == 1) {
 						return -2;
@@ -327,14 +252,12 @@ int lex() {
 						nextToken = FLOAT;
 					else{
 						nextToken = INT;
-						printf("I am here");
 					}
 						
 				}
 				addChar();
 				getChar();
 			}
-			printf("%d", nextToken);
 			hasDecimal = 0;
 			break;
 
@@ -366,16 +289,16 @@ int lex() {
 			break;
 
 		case EOF:
-			if(statementEnded) {
+			//if(statementEnded) {
 				nextToken = EOF;
 				lexeme[0] = 'E';
 				lexeme[1] = 'O';
 				lexeme[2] = 'F';
 				lexeme[3] = '\0';
-			}
+			/*}
 			else {
 				return -99;
-			}
+			}*/
 
 			
 
@@ -443,18 +366,19 @@ int lexingFunction() {		// maybe this should return the error, idk
 int main(int argc, char *argv[]) {
 
 	printf("\n");
+	printf("Statement being lexed: %s\n\n", (argv[1]));
+	//printf("%c\n", (argv[1][strlen(argv[1]) - 1]));
 
-	printf("%c", (argv[1][0]));
-	printf("%c\n", (argv[1][strlen(argv[1]) - 1]));
-
-
+	//printf("this is the string thing %s", argv[2]);
 	if(argc > 2) {
 		// later when i feel like it we can make this shit work nice and have cool syntax for the command line arguments
 		// we also need to check and make sure that the string length isnt 0 but im too lazy now
-		if(argv[1][0] == '[' && argv[1][strlen(argv[1]) - 1] == ']') {		// if its a single string in [ ] then just write it to a file like a pleb
+		//printf("%s", argv[2]);
+		if(argv[2][0] == '1') {		// if its a single string in [ ] then just write it to a file like a pleb
 
 
-			/*directStringEnabled = 1;										// take all this dynamic string shit out and just write it to a file and then reopen it; the easy way
+			/*directStringEnabled = 1;										
+			// take all this dynamic string shit out and just write it to a file and then reopen it; the easy way
 			for(int i = 0; i < strlen(argv[1]); i++) {
 				directStringLength++;
 			}
@@ -487,7 +411,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	else {
-		printf("Not enough arguments; ./lexical [program_file_name] [debug]\n");
-		printf("i.e, ./lexical program 0\n\n");
+		printf("Not enough arguments; ./lexer [program_file_name] [interpret]\n");
+		printf("i.e, ./lexer program 0\n\n");
 	}
 }

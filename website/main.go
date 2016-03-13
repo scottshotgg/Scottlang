@@ -106,26 +106,29 @@ func app(w http.ResponseWriter, r *http.Request) {
     // use a more efficient one later, too lazy right now to deal with that parsing each char shit, i hate golang for this stuff
 
 
-    me := fmt.Sprintf("%s", r.Form["commandToParse"])
+    me := strings.TrimSuffix(strings.TrimPrefix(fmt.Sprintf("%s", r.Form["commandToParse"]), "["), "]")
+
+    //me = strings.TrimPrefix(me, "[")
+    //me = strings.TrimSuffix(me, "]")
 
 	log.Println(me)
 
-    amount := len(strings.Split(me, " "))
+   /* amount := len(strings.Split(me, " "))
 
     if(amount > 3) {
     	me = fmt.Sprintf("%s", r.Form["commandToParse"])
-    }
+    }*/
 
-    log.Println(me);
+   // log.Println(me);
 
 	log.Println("Lexing command....")
 	var wg sync.WaitGroup
     wg.Add(1)
 
-    stringForCommand := []string{"gcc", "./../lexical", "-o lexical"}
+    stringForCommand := []string{"gcc", "../lexer.c", "-o", "lexer"}		// cant remember folder hierarchy
 
     if(live == 1) {
-    stringForCommand = []string{"gcc", "./lexical", "-o lexical"}
+    	stringForCommand = []string{"gcc", "lexer.c", "-o", "lexer"}
     }
 
 
@@ -140,9 +143,11 @@ func app(w http.ResponseWriter, r *http.Request) {
 
 	//command := string(byte(r.Form["command"])[:stringForCommandAmount])
 
-	stringForCommand[0] = stringForCommand[1]
-	stringForCommand[1] = me
-	stringForCommand[2] = "0"
+	stringForCommand = []string{"./lexer", me, "1"}
+
+	if(live == 1) {
+    	stringForCommand = []string{"./lexer", me, "1"}
+    }
 
 	out := exe_cmd(stringForCommand, &wg)		// for now dont modify it, but later we 
 															// should modify so that something in 
