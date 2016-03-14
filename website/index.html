@@ -17,15 +17,54 @@
 
 	<script>
 
+	var examples = 
+	[
+		"sum * sum",
+		"2 - 2",
+		"5 + sum",
+		"\"this is a string\"",
+		"45.9 + 3",
+		"sum = (sum + 47.9) / total;",
+	];
+
 	jQuery(function($, undefined) {
+	/*$('#term').terminal(function(term) {
+    	term.echo("-- type help for a list of options");
+	});*/
     $('#term').terminal(function(command, term) {
     	console.log(command);
-        if (command !== '') {
+    	if (command === "help") {
+    		term.echo("\nHELP: This is lexer/parser for the language formerly known as nothing, jk, its called ScottLang for now.\nBelow are some commands that you can use to help you get started.\n\n-- about    - if you really want to know some more information\n" /*donate   - maybe this will be a thing but even i wouldnt donate, so whatever\n*/ + "-- ex	   - if you really cant figure it out on your own and need an example, ffs\n-- github   - this will take you to the source for the language\n-- grammar  - this is coming later, i dont even know the grammar of the langauge right now\n-- lex	  - if you want to force only lexing, this is used to see the tokens that the lexer spits out, its also cool for seeing a tokenized output of whatever shit you shoved in\n-- parse	- if you want to force parsing only, this is used to test the tokens or something, idk why you'd want to do this\n-- quote	- this is some shit that we are doing for fun, have fun with it and stfu");
+    	} else if (command == "about") {
+    		// what to put for about
+    	} else if (command === "donate") {
+
+    	} else if (command === "ex") {
+    		term.echo("\n" + randomizer("example"));
+    	} else if (command === "github") {
+    		/*var win = window.open("https://github.com/scottshotgg/Scottlang", '_blank');
+			if (win) {
+    			win.focus();*/
+    			term.echo("\nhttps://github.com/scottshotgg/Scottlang");
+			/*} else {
+    		alert("Please allow popups for this site and rerun the command after allowing, alternatively you can copy pasta the shit out of the link below\nhttps://github.com/scottshotgg/Scottlang");
+			}*/
+    	} else if (command === "grammar") {
+    		term.echo("\nDidn't I already say that this is coming later and that I don't even know it?!");
+    	} else if (command === "lex") {
+    		// lex whatever
+    	} else if (command === "parse") {
+    		// parse or whatever
+    	} else if (command === "quote") {
+    		term.echo(randomizer("quote"));
+    	} else if (command !== '') {
             try {
                 var result = doCommandStuff(command);
                 console.log(command);
                 if (result !== undefined) {
+					term.echo("\n-------------------------------------------");
                     term.echo(result);
+                    term.echo("\n-------------------------------------------");
                 }
             } catch(e) {
                 term.error(new String(e));
@@ -33,14 +72,22 @@
         } else {
            term.echo('');
         }
+
+        term.echo("\n\n");
     }, 
     {
-        greetings: 'ScottLang Interpreter\n',
-        name: 'sl_demo',
+        greetings: "ScottLang Interpreter\n\n-- type \"help\" for a list of options\n\n",
+        name: "sl_demo",
         height: .95 * $(window).height(),
-        prompt: 'ScottLang >   ',
+        prompt: "ScottLang >   ",
     	size: 100 });
 	});
+
+	function randomizer(type) {
+		if (type === "example") {
+			return examples[Math.floor(Math.random() * (examples.length - 1))];
+		}
+	}
 
 	function doCommandStuff(command) {
 		var error = 0;
@@ -66,7 +113,7 @@
 			success: function(data) {
 				//returnData = data.clone();
 				//output = $.extend(true, {}, data.output);
-				output = new String(data.output + "Execution time: " + data.exectime + "\n\n");
+				output = new String(data.output + "Execution time: " + data.exectime);
 				console.log(data);
 			}
 		});

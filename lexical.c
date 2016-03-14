@@ -314,7 +314,6 @@ int lex() {
 			addChar();
 			getChar();
 			while (nextCharType == DIGIT || nextCharType == DECIMAL) {
-				printf("I'm in");
 				if(nextCharType == DECIMAL) {
 					if(hasDecimal == 1) {
 						return -2;
@@ -327,7 +326,6 @@ int lex() {
 						nextToken = FLOAT;
 					else{
 						nextToken = INT;
-						printf("I am here");
 					}
 						
 				}
