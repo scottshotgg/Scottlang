@@ -10,8 +10,9 @@ import (
 	"strings"
 	"os/exec"
 	"os"
-	//"io/ioutil"
+	"io/ioutil"
 	"strconv"
+	"time"
 
 		// this is for the live server version to determine what directory 
 				// it needs to use and where it is in relation to the lexer
@@ -19,6 +20,7 @@ import (
 
 type commandResponse struct {
 	Command string	`json:"command"`
+	Time 	string	`json:"exectime"`
 	Output string	`json:"output"`
 }
 
@@ -131,7 +133,6 @@ func app(w http.ResponseWriter, r *http.Request) {
     	stringForCommand = []string{"gcc", "lexer.c", "-o", "lexer"}
     }
 
-
 	exe_cmd(stringForCommand, &wg)			// this will not need to run everytime
 	wg.Add(1)
 
@@ -140,16 +141,23 @@ func app(w http.ResponseWriter, r *http.Request) {
 	if(live == 1) {
     	stringForCommand = []string{"./lexer", me, "1"}
     }
+    t1 := time.Now()
 
 	out := exe_cmd(stringForCommand, &wg)		// for now dont modify it, but later we 
 															// should modify so that something in 
 															// quotes will be interpreted differently
+	t2 := time.Now()
+
+
 
 	log.Println("Done lexing the command!")
+	log.Println("Execution time: ", t2.Sub(t1))
+
+	log.Println("Execution time: ", t2.Sub(t1).String())
 
 	log.Println(stringForCommand)
 
-	/*var stringy []byte
+	var stringy []byte
 
 	if(live == 1) {
 		stringy, _ = ioutil.ReadFile("program")
@@ -159,9 +167,9 @@ func app(w http.ResponseWriter, r *http.Request) {
 	s := string(stringy[:len(stringy)])
 
 	log.Println(s, out, "\n\n")
-*/
 
-	response, _ := json.Marshal(commandResponse{Command: "", Output: out})
+
+	response, _ := json.Marshal(commandResponse{Command: s, Time: t2.Sub(t1).String(), Output: out})
 	w.Write(response)
 
 }
