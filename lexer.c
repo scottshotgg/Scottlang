@@ -172,7 +172,7 @@ int lookupTable(char unkownChar) {
 
 		case '"': 				// needs to be some error checking here, also needs to know how to escape things like another quote
 		{		
-			//addChar(); 		still trying to decide if I want to include the quotes in the string value, 
+			addChar(); 			//still trying to decide if I want to include the quotes in the string value, 
 								// this should be better abstracted later to include things like the length and stuff
 			int strLen = 0;
 			getChar();
@@ -189,6 +189,8 @@ int lookupTable(char unkownChar) {
 					getChar();
 				}
 			}
+
+			addChar();			// this adds the quote
 		}	
 			nextToken = STRING;
 			break;
