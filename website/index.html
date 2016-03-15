@@ -27,6 +27,79 @@
 		"sum = (sum + 47.9) / total;",
 	];
 
+	var quotes = 
+	[
+		"\"Two things are infinite: the universe and human stupidity; and I'm not sure about the universe\".\n- Albert Einstein",
+		"\"Insanity: doing the same thing over and over again and expecting different results\".\n- Albert Einstein",
+		"\"The test of our progress is not whether we add more to the abundance of those who have much; it is whether we provide enough for those who have too little.\"\n- Franklin D. Roosevelt",
+		"\"The first principle is that you must not fool yourself and you are the easiest person to fool.\"\n- Richard Feynman",
+		"\"Physics is like sex: sure, it may give some practical results, but that's not why we do it.\"\n- Richard Feynman",
+		"\"It doesn't matter how beautiful your theory is, it doesn't matter how smart you are. If it doesn't agree with experiment, it's wrong.\"\n- Richard Feynman",
+		"\"The dumbing down of America is most evident in the slow decay of substantive content in the enormously influential media, the 30 second sound bites (now down to 10 seconds or less), lowest common denominator programming, credulous presentations on pseudoscience and superstition, but especially a kind of celebration of ignorance.\"\n- Carl Sagan",
+		"\"It was not Marxism that made Lenin revolutionary but Lenin who made Marxism revolutionary.\"- Orlando Figes, Revolutionary Russia: 1891-1991 A History",
+		"\"Планета есть колыбель разума, но нельзя вечно жить в колыбели.\"\n\"Earth is the cradle of humankind [literal: mind], but one cannot stay in the cradle forever.\"\n- Konstantin Tsiolkovsky",
+		"\"An expert is a person who has made all the mistakes that can be made in a very narrow field.\"\n- Neils Bohr",
+		"\"An expert is someone who knows some of the worst mistakes that can be made in his subject, and how to avoid them.\"\n- Werner Heisenberg",
+		"\"A computer would deserve to be called intelligent if it could deceive a human into believing that it was human.\"\n- Alan Turing",
+		"\"Science is a differential equation. Religion is a boundary condition.\"\n- Alan Turing",
+		"\"If anything is certain, it is that I myself am not a Marxist.\"\n- Karl Marx [In a letter about the peculiar 'Marxism' which arose in France 1882]",
+		"\"Religion is the impotence of the human mind to deal with occurrences it cannot understand.\"\n- Karl Marx",
+		"\"By all means let's be open-minded, but not so open-minded that our brains drop out.\"\n- Richard Dawkins",
+		"\"One of the things that is wrong with religion is that it teaches us to be satisfied with answers which are not really answers at\"\n- Richard Dawkins.",
+		"\"God exists, if only in the form of a meme with high survival value, or infective power, in the environment provided by human culture.\"\n-  Richard Dawkins",
+		"\"God exists, if only in the form of a meme with high survival value, or infective power, in the environment provided by human culture.\"\n- Richard Dawkins",
+		"\"Somewhere, something incredible is waiting to be known.\"\n- Carl Sagan",
+		"\"We live in a society exquisitely dependent on science and technology, in which hardly anyone knows anything about science and technology.\"\n- Carl Sagan",
+		"\"Value your freedom or you will lose it, teaches history. 'Don't bother us with politics', respond those who don't want to learn.\"\n- Richard M. Stallman",
+		"\"I could have made money this way, and perhaps amused myself writing code. But I knew that at the end of my career, I would look back on years of building walls to divide people, and feel I had spent my life making the world a worse place.\"- Richard M. Stallman",
+		"\"Software is like sex: it's better when it's free.\"\n- Linus Torvalds",
+		"\"In my opinion MS is a lot better at making money than it is at making good operating systems.\"\n- Linus Torvalds",
+		"\"Microsoft isn't evil, they just make really crappy operating systems.\"\n- Linus Torvalds",
+		"\"Intelligence is the ability to avoid doing work, yet getting the work done.\"\n- Linus Torvalds",
+		"\"The cyberspace earnings I get from Linux come in the format of having a Network of people that know me and trust me, and that I can depend on in return.\"\n- Linus Torvalds",
+		"\"Talk is cheap. Show me the code.\"\n- Linus Torvalds",
+		"\"That's what makes Linux so good: you put in something, and that effort multiplies. It's a positive feedback cycle.\"\n- Linus Torvalds",
+		"\"Shareware tends to combine the worst of commercial software with the worst of free software.\"\n- Linus Torvalds",
+		"\"At least for the people who send me mail about a new language that they're designing, the general advice is: do it to learn about how to write a compiler.\"\n- Dennis Ritchie",
+		"\"I can't recall any difficulty in making the C language definition completely open - any discussion on the matter tended to mention languages whose inventors tried to keep tight control, and consequent ill fate.\"\n- Dennis Ritchie",
+		"\"UNIX is basically a simple operating system, but you have to be a genius to understand the simplicity.\"\n- Dennis Ritchie",
+		"\"When in doubt, use brute force.\"\n- Ken Thompson",
+		"\"If you want to go somewhere, goto is the best way to get there.\"\n- Ken Thompson",
+		"\"Success is a lousy teacher. It seduces smart people into thinking they can't lose.\"\n- Bill Gates",
+		"\"As we look ahead into the next century, leaders will be those who empower others.\"\n- Bill Gates",
+		"\"Public education does not exist for the benefit of students or the benefit of their parents. It exists for the benefit of the social order.\nWe have discovered as a species that it is useful to have an educated population. You do not need to be a student or have a child who is a student to benefit from public education. Every second of every day of your life, you benefit from public education.\nSo let me explain why I like to pay taxes for schools, even though I don't personally have a kid in school: It's because I don't like living in a country with a bunch of stupid people.\"\n- John Green",
+		"\"If we don't believe in freedom of expression for people we despise, we don't believe in it at all.\"\n- Noam Chomsky",
+		"\"The Bible is one of the most genocidal books in history.\"\n- Noam Chomsky",
+		"\"Language is a process of free creation; its laws and principles are fixed, but the manner in which the principles of generation are used is free and infinitely varied. Even the interpretation and use of words involves a process of free creation.\"\n- Noam Chomsky",
+		"\"The United States is unusual among the industrial democracies in the rigidity of the system of ideological control - 'indoctrination', we might say - exercised through the mass media.\"\n- Noam Chomsky",
+		"\"That’s the standard technique of privatization: defund, make sure things don’t work, people get angry, you hand it over to private capital.\"\n- Noma Chomsky",
+		"\"As for my own views, they've of course evolved over the years. This conception of 'renouncing beliefs' is very odd, as if we're in some kind of religious cult. I 'renounce beliefs' practically every time I think about the topics or find out what someone else is thinking.\"\n- Noam Chomsky",
+		"\"The world is a very puzzling place. If you're not willing to be puzzled, you become a replica of someone else's mind.\"\n- Noam Chomsky",
+		"\"The whole problem with the world is that fools and fanatics are always so certain of themselves, but wiser people so full of doubts.\"\n- Bertrand Russell",
+		"\"The time you enjoy wasting is not wasted time.\"\n- Bertrand Russell",
+		"\"If people never did silly things nothing intelligent would ever get done.\"\n- Ludwig Wittgenstein",
+		"\"he limits of my language mean the limits of my world.\"\n- Ludwig Wittgenstein",
+		"\"No man's knowledge here can go beyond his experience.\"\n- John Locke",
+		"\"All mankind... being all equal and independent, no one ought to harm another in his life, health, liberty or possessions.\"\n- John Locke",
+		"\"The improvement of understanding is for two ends: first, our own increase of knowledge; secondly, to enable us to deliver that knowledge to others.\"\n- John Locke",
+		"\"There cannot be greater rudeness than to interrupt another in the current of his discourse.\"\n- John Locke",
+		"\"Tell me and I forget, teach me and I may remember, involve me and I learn.\"\n- Benjamin Franklin",
+		"\"By failing to prepare, you are preparing to fail.\"\n- Benjamin Franklin",
+		"\"I cannot teach anybody anything, I can only make them think.\"\n- Socrates",
+		"\"Religion is regarded by the common people as true, by the wise as false, and by the rulers as useful.\"\n- Lucius Annaeus Seneca",
+		"\"All science requires mathematics. The knowledge of mathematical things is almost innate in us. This is the easiest of sciences, a fact which is obvious in that no one's brain rejects it; for laymen and people who are utterly illiterate know how to count and reckon.\"\n- Roger Bacon",
+		"\"You don't set out to build a wall. You don't say 'I'm going to build the biggest, baddest, greatest wall that's ever been built.' You don't start there. You say, 'I'm going to lay this brick as perfectly as a brick can be laid. You do that every single day. And soon you have a wall.\"\n- Will Smith",
+		"\"Why shouldn't I work for the N.S.A.? That's a tough one, but I'll take a shot. Say I'm working at the N.S.A. Somebody puts a code on my desk, something nobody else can break. Maybe I take a shot at it and maybe I break it. And I'm real happy with myself, 'cause I did my job well. But maybe that code was the location of some rebel army in North Africa or the Middle East. Once they have that location, they bomb the village where the rebels were hiding and fifteen hundred people that I never met and that I never had no problem with get killed. Now the politicians are sayin', \"Send in the marines to secure the area\" 'cause they don't give a shit. It won't be their kid over there, gettin' shot. Just like it wasn't them when their number was called, 'cause they were pullin' a tour in the National Guard. It'll be some kid from Southie takin' shrapnel in the ass. And he comes home to find that the plant he used to work at got exported to the country he just got back from. And the guy who put the shrapnel in his ass got his old job, 'cause he'll work for fifteen cents a day and no bathroom breaks. Meanwhile he realizes the only reason he was over there in the first place was so we could install a government that would sell us oil at a good price. And of course the oil companies used the skirmish over there to scare up domestic oil prices. A cute little ancillary benefit for them but it ain't helping my buddy at two-fifty a gallon. They're takin' their sweet time bringin' the oil back, and maybe even took the liberty of hiring an alcoholic skipper who likes to drink martinis and fuckin' play slalom with the icebergs, and it ain't too long 'til he hits one, spills the oil and kills all the sea life in the North Atlantic. So now my buddy's out of work and he can't afford to drive, so he's walking to the fuckin' job interviews, which sucks 'cause the schrapnel in his ass is givin' him chronic hemorroids. And meanwhile he's starvin' 'cause every time he tries to get a bite to eat the only blue plate special they're servin' is North Atlantic scrod with Quaker State. So what did I think? I'm holdin' out for somethin' better. I figure, fuck it, while I'm at it, why not just shoot my buddy, take his job and give it to his sworn enemy, hike up gas prices, bomb a village, club a baby seal, hit the hash pipe and join the National Guard? I could be elected president.\"\n- Matt Damon, Good Will Hunting\nhttps://www.youtube.com/watch?v=UrOZllbNarw"/*,
+		"\"\"\n- "
+		"\"\"\n- "
+		"\"\"\n- "
+		"\"\"\n- "
+		"\"\"\n- "
+		"\"\"\n- "
+		"\"\"\n- "
+		"\"\"\n- "*/
+	];
+
 	jQuery(function($, undefined) {
 	/*$('#term').terminal(function(term) {
     	term.echo("-- type help for a list of options");
@@ -34,7 +107,7 @@
     $('#term').terminal(function(command, term) {
     	console.log(command);
     	if (command === "help") {
-    		term.echo("\nHELP: This is lexer/parser for the language formerly known as nothing, jk, its called ScottLang for now.\nBelow are some commands that you can use to help you get started.\n\n-- about    - if you really want to know some more information\n" /*donate   - maybe this will be a thing but even i wouldnt donate, so whatever\n*/ + "-- ex	   - if you really cant figure it out on your own and need an example, ffs\n-- github   - this will take you to the source for the language\n-- grammar  - this is coming later, i dont even know the grammar of the langauge right now\n-- lex	  - if you want to force only lexing, this is used to see the tokens that the lexer spits out, its also cool for seeing a tokenized output of whatever shit you shoved in\n-- parse	- if you want to force parsing only, this is used to test the tokens or something, idk why you'd want to do this\n-- quote	- this is some shit that we are doing for fun, have fun with it and stfu");
+    		term.echo("\nHELP: This is a lexer/parser for the language formerly known as nothing, jk, its called ScottLang for now.\nBelow are some commands that you can use to help you get started.\n\n-- about    - if you really want to know some more information\n" /*donate   - maybe this will be a thing but even i wouldnt donate, so whatever\n*/ + "-- ex	   - if you really cant figure it out on your own and need an example, ffs\n-- github   - this will take you to the source for the language\n-- grammar  - this is coming later, i dont even know the grammar of the langauge right now\n-- lex	  - if you want to force only lexing, this is used to see the tokens that the lexer spits out, its also cool for seeing a tokenized output of whatever shit you shoved in\n-- parse	- if you want to force parsing only, this is used to test the tokens or something, idk why you'd want to do this\n-- quote	- this is some shit that we are doing for fun, have fun with it and stfu");
     	} else if (command == "about") {
     		// what to put for about
     	} else if (command === "donate") {
@@ -56,7 +129,7 @@
     	} else if (command === "parse") {
     		// parse or whatever
     	} else if (command === "quote") {
-    		term.echo(randomizer("quote"));
+    		term.echo("\n" + randomizer("quote"));
     	} else if (command !== '') {
             try {
                 var result = doCommandStuff(command);
@@ -85,7 +158,9 @@
 
 	function randomizer(type) {
 		if (type === "example") {
-			return examples[Math.floor(Math.random() * (examples.length - 1))];
+			return examples[Math.floor(Math.random() * (examples.length))];
+		} else {
+			return quotes[Math.floor(Math.random() * (quotes.length))];
 		}
 	}
 
