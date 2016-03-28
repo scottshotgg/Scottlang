@@ -29,8 +29,8 @@ int statementEnded		= 0;
 FILE *file_reader, *fopen();
 FILE *file_writer, *fopen();
 
-typedef std::vector<int>	int_v;
-typedef std::vector<char*>	str_v;
+typedef std::vector<int>			int_v;
+typedef std::vector<std::string>	str_v;
 
 extern int parse(int_v, str_v);
 /*	
@@ -323,12 +323,12 @@ int lex() {
 	printf("Next token is: %d	Next lexeme is: %s\n", nextToken, lexeme);
 
 	tokens.push_back(nextToken);
-
-	printf("%s", lexeme);
+	std::string lexemeStr(lexeme);
+	//printf("%s", lexemeStr);
 
 	//std::string lexemeStr(lexeme, 3);
 	//printf("this is the token %s", lexemeStr);
-	lexemes.push_back(lexeme);
+	lexemes.push_back(lexemeStr);
 
 	if (lookupError == 0) {
 		return nextToken;
@@ -443,7 +443,7 @@ int main(int argc, char *argv[]) {
 	printf("\nStarting parsing\n\n");
 
 	for (int i = 0; i < lexemes.size(); i++) {
-    	printf("%s ", lexemes[i]);
+    	//printf("%c ", lexemes[i]);
 	}
 
 	parse(tokens, lexemes);

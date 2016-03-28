@@ -13,7 +13,8 @@
 //FILE *file_reader, *fopen();
 //FILE *file_writer, *fopen();
 
-// this doesn't need to be dynamic, since the tokens aren't of much length, and especially not longer that 20 chars
+// this doesn't need to be dynamic, since the tokens aren't of 
+// much length, and especially not longer that 20 chars
 char token_name_array[20];
 int token_name_count = 0;
 
@@ -65,7 +66,7 @@ int token_name_count = 0;
 
 // typedef this shit so we don't have to write a story everytime
  typedef std::vector<int> 	int_v;
- typedef std::vector<char*> str_v;
+ typedef std::vector<std::string> str_v;
 
 // should use a template later to increase the generality of the function
 
@@ -85,7 +86,7 @@ void strPrint(str_v vector) {
 	printf("[ ");
 
 	for (int i = 0; i < vector.size(); i++) {
-    	printf("%s ", vector[i]);
+    	printf("%s ", vector[i].c_str());
 	}
 
     printf("]");
@@ -156,6 +157,9 @@ int parse(int_v tokens, str_v lexemes) {
 	//mine.print();
 
 	print(tokens);
+
+	printf("\n");
+
 	strPrint(lexemes);
 
 	printf("\n\n\n");
