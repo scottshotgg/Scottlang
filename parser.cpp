@@ -3,13 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "dynamicArray.h"
+//#include "dynamicArray.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h> 
+#include <string>
+#include <vector>
+#include <typeinfo>
 
-FILE *file_reader, *fopen();
-FILE *file_writer, *fopen();
+//FILE *file_reader, *fopen();
+//FILE *file_writer, *fopen();
 
+// this doesn't need to be dynamic, since the tokens aren't of much length, and especially not longer that 20 chars
 char token_name_array[20];
 int token_name_count = 0;
 
@@ -59,7 +63,38 @@ int token_name_count = 0;
 #define END_STATEMENT		99 
 
 
-int main() {
+// typedef this shit so we don't have to write a story everytime
+ typedef std::vector<int> 	int_v;
+ typedef std::vector<char*> str_v;
+
+// should use a template later to increase the generality of the function
+
+template <typename T>
+void print(T vector) {
+
+	printf("[ ");
+
+	for (int_v::const_iterator i = vector.begin(); i != vector.end(); ++i)
+    	printf("%d ", *i);
+
+    printf("]");
+}
+
+void strPrint(str_v vector) {
+
+	printf("[ ");
+
+	for (int i = 0; i < vector.size(); i++) {
+    	printf("%s ", vector[i]);
+	}
+
+    printf("]");
+}
+
+
+int parse(int_v tokens, str_v lexemes) {
+	// this will be used when the file is modularized
+
 
 	/*
 	int arrayLength = sizeof(token_name_array) / sizeof(char);
@@ -68,29 +103,28 @@ int main() {
 		printf("%c", token_name_array[i]);
 	}
 	*/
-
-	DynamicArray mine = DynamicArray();
+	//DynamicArray mine = DynamicArray();
 
 	srand (time(NULL));
 
 
-	int me = mine.length();
-	/*for(int i = 0; i < 10000; i++) {
-		//mine.push(rand() % 1000 + 1);
+	//int me = mine.length();
+	/*for(int i = 0; i < 10000; i++) {i
+		//mine.push(rand() % 1000 + 1)
 		//mine.push(i);
 
 	}
-*/
+	*/
 	//mine.print();
 
 	printf("\n\n");
 
 	//mine.print();
 
-	printf("\n\n");
+	//printf("\n\n");
 
 
-	file_reader = fopen("tokens", "r");
+	/*file_reader = fopen("tokens", "r");
 	//file_writer = fopen("tokens", "w");
 	char nextChar = getc(file_reader);
 
@@ -103,12 +137,83 @@ int main() {
 		else {
 			//extractInt();
 			//printf("%d", atoi(token_name_array));
-			mine.push(atoi(token_name_array));
+			tokens.push_back(atoi(token_name_array));
+			//mine.push(atoi(token_name_array));
 			token_name_count = 0;
 
 			//int arrayLength = sizeof(token_name_array) / sizeof(char);
 
-			for(int i = 0; i < 19; i++) {
+			for(int i = 0; i < 20; i++) {
+				//printf("%c", token_name_array[i]);
+				token_name_array[i] = '\0';
+			}
+
+			//printf("\n\n");
+		}
+
+	} while((nextChar = getc(file_reader)) != EOF);*/
+
+	//mine.print();
+
+	print(tokens);
+	strPrint(lexemes);
+
+	printf("\n\n\n");
+
+	return 0;
+}
+
+/*
+int main() {
+
+	/*
+	int arrayLength = sizeof(token_name_array) / sizeof(char);
+
+	for(int i = 0; i < arrayLength; i++) {
+		printf("%c", token_name_array[i]);
+	}
+	int_v tokens;
+	str_v lexems;
+	//DynamicArray mine = DynamicArray();
+
+	srand (time(NULL));
+
+
+	//int me = mine.length();
+	/*for(int i = 0; i < 10000; i++) {
+		//mine.push(rand() % 1000 + 1);
+		//mine.push(i);
+
+	}
+	//mine.print();
+
+	printf("\n\n");
+
+	//mine.print();
+
+	//printf("\n\n");
+
+
+	/*file_reader = fopen("tokens", "r");
+	//file_writer = fopen("tokens", "w");
+	char nextChar = getc(file_reader);
+
+	do {
+
+		if(nextChar != '\n') {
+			token_name_array[token_name_count++] = nextChar;
+			//printf("%c\n", nextChar);
+		}
+		else {
+			//extractInt();
+			//printf("%d", atoi(token_name_array));
+			tokens.push_back(atoi(token_name_array));
+			//mine.push(atoi(token_name_array));
+			token_name_count = 0;
+
+			//int arrayLength = sizeof(token_name_array) / sizeof(char);
+
+			for(int i = 0; i < 20; i++) {
 				//printf("%c", token_name_array[i]);
 				token_name_array[i] = '\0';
 			}
@@ -118,9 +223,11 @@ int main() {
 
 	} while((nextChar = getc(file_reader)) != EOF);
 
-	mine.print();
+	//mine.print();
 
-	printf("\n");
+	print(tokens);
+
+	printf("\n\n\n");
 
 	return 0;
-}
+}*/

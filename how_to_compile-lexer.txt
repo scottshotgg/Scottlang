@@ -1,0 +1,1 @@
+gcc lexer.c -o lexer && ./lexer program 0

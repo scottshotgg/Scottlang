@@ -39,9 +39,12 @@ void DynamicArray::print() {		// make a seperating symbol
 void DynamicArray::expand() {
 	//int *arrayTempCopy = new int[len + expansionAmount];
 	int *arrayTempCopy = (int *)realloc(array, (len + expansionAmount) * sizeof(int));
+	// these are all debug shit that you dont need to worry about 
+
+
 	
-	//print();
-	char me;
+	//print();		
+	//char me;
 
 	//std::cin >> me;
 	//std::memcpy(&arrayTempCopy, &array, len);
@@ -65,7 +68,9 @@ void DynamicArray::expand() {
 	//free(array);
 	//delete [] array;
 	//array = (int *)realloc(arrayTempCopy, len * sizeof(int));
-	array = (int *)realloc(arrayTempCopy, len * sizeof(int));
+	//array = (int *)realloc(arrayTempCopy, len * sizeof(int));
+	
+	array = arrayTempCopy;
 	//print();
 	/*for(int i = 0; i < len; i++) {
 		array[i] = arrayTempCopy[i];
@@ -79,6 +84,6 @@ void DynamicArray::expand() {
 	//printf("Size: %lu", sizeof(array) / sizeof(int));
 
 	//std::memcpy(&array, &arrayTempCopy, len + expansionAmount);
-	printf("%d\n", len);
+	//printf("%d\n", len);
 
 }

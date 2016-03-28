@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
+#include <vector>
 
 char lexeme[100];
 
@@ -28,7 +29,10 @@ int statementEnded		= 0;
 FILE *file_reader, *fopen();
 FILE *file_writer, *fopen();
 
+typedef std::vector<int>	int_v;
+typedef std::vector<char*>	str_v;
 
+extern int parse(int_v, str_v);
 /*	
 	Make a switch or use an associative array to pack this into a coherent 
 	data structure that will allow us to unpack the names from it when we 
@@ -78,6 +82,10 @@ FILE *file_writer, *fopen();
 
 /* End statement */
 #define END_STATEMENT		99 
+
+
+int_v tokens;
+str_v lexemes;
 
 
 
@@ -313,6 +321,15 @@ int lex() {
 	}
 
 	printf("Next token is: %d	Next lexeme is: %s\n", nextToken, lexeme);
+
+	tokens.push_back(nextToken);
+
+	printf("%s", lexeme);
+
+	//std::string lexemeStr(lexeme, 3);
+	//printf("this is the token %s", lexemeStr);
+	lexemes.push_back(lexeme);
+
 	if (lookupError == 0) {
 		return nextToken;
 	}
@@ -361,7 +378,7 @@ int lexingFunction() {		// maybe this should return the error, idk
 		}
 	} while(nextChar != EOF);
 
-	printf("\nParsing completed: no errors\n\n");
+	printf("\nLexing completed: no errors\n\n");
 
 	return 0;
 }
@@ -369,7 +386,10 @@ int lexingFunction() {		// maybe this should return the error, idk
 int main(int argc, char *argv[]) {
 
 	printf("\n");
-	printf("Statement being lexed: %s\n\n", (argv[1]));
+	// /printf("Statement being lexed: %s\n\n", (argv[1]));
+
+
+	printf("\nStarting lexing\n\n");
 	//printf("%d", isalpha('2'));
 	//printf("%c\n", (argv[1][strlen(argv[1]) - 1]));
 
@@ -418,4 +438,14 @@ int main(int argc, char *argv[]) {
 		printf("Not enough arguments; ./lexer [program_file_name] [interpret]\n");
 		printf("i.e, ./lexer program 0\n\n");
 	}
+
+
+	printf("\nStarting parsing\n\n");
+
+	for (int i = 0; i < lexemes.size(); i++) {
+    	printf("%s ", lexemes[i]);
+	}
+
+	parse(tokens, lexemes);
+
 }
