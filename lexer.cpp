@@ -389,6 +389,9 @@ int main(int argc, char *argv[]) {
 	// /printf("Statement being lexed: %s\n\n", (argv[1]));
 
 
+	printf("----------------------------------------------------------------");
+
+
 	printf("\nStarting lexing\n\n");
 	//printf("%d", isalpha('2'));
 	//printf("%c\n", (argv[1][strlen(argv[1]) - 1]));
@@ -439,12 +442,7 @@ int main(int argc, char *argv[]) {
 		printf("i.e, ./lexer program 0\n\n");
 	}
 
-
-	printf("\nStarting parsing\n\n");
-
-	for (int i = 0; i < lexemes.size(); i++) {
-    	//printf("%c ", lexemes[i]);
-	}
+	printf("----------------------------------------------------------------");
 
 	parse(tokens, lexemes);
 

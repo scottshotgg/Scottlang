@@ -92,77 +92,34 @@ void strPrint(str_v vector) {
     printf("]");
 }
 
+int switchTable(int token) {
+	//switch(tokens[1])
+
+
+}
+
 
 int parse(int_v tokens, str_v lexemes) {
-	// this will be used when the file is modularized
 
 
-	/*
-	int arrayLength = sizeof(token_name_array) / sizeof(char);
+	printf("\n\n\n----------------------------------------------------------------");
 
-	for(int i = 0; i < arrayLength; i++) {
-		printf("%c", token_name_array[i]);
-	}
-	*/
-	//DynamicArray mine = DynamicArray();
-
-	srand (time(NULL));
-
-
-	//int me = mine.length();
-	/*for(int i = 0; i < 10000; i++) {i
-		//mine.push(rand() % 1000 + 1)
-		//mine.push(i);
-
-	}
-	*/
-	//mine.print();
+	printf("\nStarting parsing\n\n");
+	
+	print(tokens);
 
 	printf("\n\n");
 
-	//mine.print();
-
-	//printf("\n\n");
-
-
-	/*file_reader = fopen("tokens", "r");
-	//file_writer = fopen("tokens", "w");
-	char nextChar = getc(file_reader);
-
-	do {
-
-		if(nextChar != '\n') {
-			token_name_array[token_name_count++] = nextChar;
-			//printf("%c\n", nextChar);
-		}
-		else {
-			//extractInt();
-			//printf("%d", atoi(token_name_array));
-			tokens.push_back(atoi(token_name_array));
-			//mine.push(atoi(token_name_array));
-			token_name_count = 0;
-
-			//int arrayLength = sizeof(token_name_array) / sizeof(char);
-
-			for(int i = 0; i < 20; i++) {
-				//printf("%c", token_name_array[i]);
-				token_name_array[i] = '\0';
-			}
-
-			//printf("\n\n");
-		}
-
-	} while((nextChar = getc(file_reader)) != EOF);*/
-
-	//mine.print();
-
-	print(tokens);
-
-	printf("\n");
-
 	strPrint(lexemes);
 
-	printf("\n\n\n");
+	printf("\n\n");
+
+	for(int i = 0; i < tokens.size(); i++) {
+		switchTable(tokens[i]);
+	}
+
+
+	printf("----------------------------------------------------------------");
 
 	return 0;
 }
