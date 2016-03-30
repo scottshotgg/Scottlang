@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
+#include <sstream>
+
+#include <iostream>
 
 //FILE *file_reader, *fopen();
 //FILE *file_writer, *fopen();
@@ -34,7 +37,7 @@ int token_name_count = 0;
 #define STRING				14
 
 
-/* Operators */
+/* Operators *
 #define ASSIGN_OP			30
 #define ADD_OP				31
 #define SUB_OP				32
@@ -65,8 +68,18 @@ int token_name_count = 0;
 
 
 // typedef this shit so we don't have to write a story everytime
- typedef std::vector<int> 	int_v;
- typedef std::vector<std::string> str_v;
+typedef std::vector<int> 	int_v;
+typedef std::vector<std::string> str_v;
+
+
+int 	lastToken 	 = -1;
+int 	iterator 	 =  0;
+int 	state 		 =  0;
+int 	intLastSum 	 =  0;
+float 	lastSum 	 =  0;
+int_v	globalTokens;
+str_v 	globalLexems;
+float nextTokenVal = 0;
 
 // should use a template later to increase the generality of the function
 
@@ -92,12 +105,109 @@ void strPrint(str_v vector) {
     printf("]");
 }
 
-int switchTable(int token) {
-	//switch(tokens[1])
-
-
+// function converts a cstring to float value, if you need an int just cast it afterwards
+float cstof(std::string strn) {
+	std::stringstream convert;
+	convert << strn;
+	float number; 
+	convert >> number;
+	return number;
 }
 
+// convert this to a state machine
+int switchTable(int token) {
+	switch(token) {
+		case 10: {
+			// here we would need to check if the var exists or not and then retrieve it, but not yet
+			// assume that the var is 0
+			break;
+		}
+		case 30: {
+			if(lastToken != 10) {
+				printf("invalid assignment operation");
+			}
+			break;
+		}
+		case 31: {
+			if(lastToken == 10 || lastToken == 11 || lastToken == 12 || lastToken == 13 || lastToken == 14) {	
+				// need to check the next token
+				//printf("%d", globalTokens[iterator + 1]);
+				//float lastTokenVal = 0;
+				
+
+				// make this more explicit
+				/*if(lastToken != 10) {
+					//lastTokenVal = atoi(globalLexems[iterator - 1]);
+					lastTokenVal = cstof(globalLexems[iterator - 1]);
+				}*/
+
+				// make this more explicit
+				if(nextTokenVal != 10) {
+					//lastTokenVal = atoi(globalLexems[iterator + 1]);
+					nextTokenVal = cstof(globalLexems[iterator + 1]);
+				} 
+
+				//printf("%f    %f\n", lastTokenVal, nextTokenVal);
+
+
+
+				// just do everything in float and then convert at the end to the expected value, this might work
+				lastSum += nextTokenVal;
+				//printf("No type inherited or implicitly specified, non-conversion value: %f\n", lastSum);
+
+				//std::string this_string(globalLexems[6], (sizeof(globalLexems[6])/sizeof(char)));
+				//std::string this_string(globalLexems[6]);
+				//printf("%s ", globalLexems[6].c_str());
+
+				//maybe we can do something with this
+				//printf("%d", atoi("45.677"));
+
+				//std::stringstream convert;
+				//convert << globalLexems[6];
+				
+				//float number = 0.0;
+
+				//convert >> number;
+
+				
+
+				//std::string testString = "";
+				//testString += "90";
+				//printf("%s", testString);
+				//printf("%d", atoi(this_string));
+
+				iterator++;
+
+			}
+			break;
+		}
+
+		case 11: {
+			printf("i got here");
+			break;
+		}
+
+		case 32: {
+			if(nextTokenVal != 10) {
+				nextTokenVal = cstof(globalLexems[iterator + 1]);
+			}
+			lastSum -= nextTokenVal;
+			//printf("No type inherited or implicitly specified, non-conversion value: %f\n", lastSum);
+			break;
+		}
+		// could just make this the default
+		case 99: {
+			printf("END STATEMENT %f\n\n", lastSum);
+			break;
+		}
+	}
+
+	lastToken = token;
+}
+
+int stateMachine(int token) {
+	//case
+}
 
 int parse(int_v tokens, str_v lexemes) {
 
@@ -105,6 +215,9 @@ int parse(int_v tokens, str_v lexemes) {
 	printf("\n\n\n----------------------------------------------------------------");
 
 	printf("\nStarting parsing\n\n");
+
+	globalTokens = tokens;
+	globalLexems = lexemes;
 	
 	print(tokens);
 
@@ -114,12 +227,13 @@ int parse(int_v tokens, str_v lexemes) {
 
 	printf("\n\n");
 
-	for(int i = 0; i < tokens.size(); i++) {
-		switchTable(tokens[i]);
+	for(iterator = 0; iterator < tokens.size(); iterator++) {
+		//stateMachine(tokens[iterator]);
+		switchTable(tokens[iterator]);
 	}
 
 
-	printf("----------------------------------------------------------------");
+	printf("----------------------------------------------------------------\n");
 
 	return 0;
 }
