@@ -37,7 +37,7 @@ int token_name_count = 0;
 #define STRING				14
 
 
-/* Operators *
+/* Operators */
 #define ASSIGN_OP			30
 #define ADD_OP				31
 #define SUB_OP				32
@@ -79,7 +79,7 @@ int 	intLastSum 	 =  0;
 float 	lastSum 	 =  0;
 int_v	globalTokens;
 str_v 	globalLexems;
-float nextTokenVal = 0;
+float 	nextTokenVal = 0;
 
 // should use a template later to increase the generality of the function
 
@@ -103,6 +103,19 @@ void strPrint(str_v vector) {
 	}
 
     printf("]");
+}
+
+int term() {
+
+}
+
+int expr() {
+	return term() * factor();
+}
+
+int var() {
+	// set this equal to something 
+	expr();
 }
 
 // function converts a cstring to float value, if you need an int just cast it afterwards
@@ -197,7 +210,7 @@ int switchTable(int token) {
 		}
 		// could just make this the default
 		case 99: {
-			printf("END STATEMENT %f\n\n", lastSum);
+			printf("END STATEMENT \nsum = %f\n\n", lastSum);
 			break;
 		}
 	}
