@@ -105,6 +105,10 @@ void strPrint(str_v vector) {
     printf("]");
 }
 
+int factor() {
+	
+}
+
 int term() {
 
 }
