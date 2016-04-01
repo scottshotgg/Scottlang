@@ -67,6 +67,9 @@ int token_name_count = 0;
 #define END_STATEMENT		99 
 
 
+void expr();
+
+
 // typedef this shit so we don't have to write a story everytime
 typedef std::vector<int> 	int_v;
 typedef std::vector<std::string> str_v;
@@ -83,13 +86,15 @@ float 	nextTokenVal = 0;
 
 // should use a template later to increase the generality of the function
 
-template <typename T>
-void print(T vector) {
+void print(int_v vector) {
 
 	printf("[ ");
 
-	for (int_v::const_iterator i = vector.begin(); i != vector.end(); ++i)
-    	printf("%d ", *i);
+	/*for (int_v::const_iterator i = vector.begin(); i != vector.end(); ++i)
+    	printf("%d ", *i);*/
+	for(int i = 0; i < vector.size(); i++) {
+		printf("%d ", vector[i]);
+	}
 
     printf("]");
 }
@@ -114,24 +119,53 @@ void strPrint(str_v vector) {
     printf("]");
 }
 
-int factor() {
-	
-	return 0;			// just put this here for now
+void factor() {
+	printf("<factor>");
+
+	if(globalTokens[iterator] == VAR || globalTokens[iterator] == INT) {
+		iterator++;
+	}
+	else {
+		if(globalTokens[iterator] == LEFT_PAREN) {
+			iterator++;
+			expr();
+			if(globalTokens[iterator] == RIGHT_PAREN) {
+				iterator++;
+			}
+			else {
+				printf("something went wrong");
+			}
+		}
+	}
+	//return 0;			// just put this here for now
 }
 
-int term() {
+void term() {
+	printf("<term>");
+	factor();
 
-	return 0;			// just put this here for now
+	while(globalTokens[iterator] == MULT_OP || globalTokens[iterator] == DIV_OP) {
+		iterator++;
+		factor();
+	}
+
+	//return 0;			// just put this here for now
 }
 
-int expr() {
+void expr() {
+	printf("<expr>");
+	iterator++;
+	term();
 
-	return term();
+	while(globalTokens[iterator] == ADD_OP || globalTokens[iterator] == SUB_OP) {
+		iterator++;
+		term();
+	}
 }
 
-int var() {
+void var() {
 	// set this equal to something 
-	return expr();
+	//return expr();
 }
 
 // convert this to a state machine
@@ -251,11 +285,12 @@ int parse(int_v tokens, str_v lexemes) {
 
 	for(iterator = 0; iterator < tokens.size(); iterator++) {
 		//stateMachine(tokens[iterator]);
-		switchTable(tokens[iterator]);
+		//switchTable(tokens[iterator]);
+		expr();
 	}
 
 
-	printf("----------------------------------------------------------------\n\n");
+	printf("\n\n----------------------------------------------------------------\n\n");
 
 	return 0;
 }
