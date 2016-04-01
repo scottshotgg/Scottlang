@@ -130,6 +130,8 @@
     		// parse or whatever
     	} else if (command === "quote") {
     		term.echo("\n" + randomizer("quote"));
+    	} else if (command === '\n'){
+    		console.log("we got this");
     	} else if (command !== '') {
             try {
                 var result = doCommandStuff(command);
@@ -143,7 +145,7 @@
                 term.error(new String(e));
             }
         } else {
-           term.echo('');
+           //term.echo(command);
         }
 
         term.echo("\n\n");

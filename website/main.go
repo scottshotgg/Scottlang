@@ -127,10 +127,10 @@ func app(w http.ResponseWriter, r *http.Request) {
 	var wg sync.WaitGroup
     wg.Add(1)
 
-    stringForCommand := []string{"gcc", "../lexer.c", "-o", "lexer"}		// cant remember folder hierarchy
+    stringForCommand := []string{"g++", "-O3", "-std=c++14", "../parser.cpp", "../lexer.cpp", "-o", "lexer"}		// cant remember folder hierarchy
 
     if(live == 1) {
-    	stringForCommand = []string{"gcc", "lexer.c", "-o", "lexer"}
+    	stringForCommand = []string{"g++", "-O3", "-std=c++14", "parser.cpp", "lexer.cpp", "-o", "lexer"}
     }
 
 	exe_cmd(stringForCommand, &wg)			// this will not need to run everytime
@@ -153,7 +153,7 @@ func app(w http.ResponseWriter, r *http.Request) {
 	log.Println("Done lexing the command!")
 	log.Println("Execution time: ", t2.Sub(t1))
 
-	log.Println("Execution time: ", t2.Sub(t1).String())
+	//log.Println("Execution time: ", t2.Sub(t1).String())
 
 	log.Println(stringForCommand)
 
