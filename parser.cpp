@@ -94,6 +94,15 @@ void print(T vector) {
     printf("]");
 }
 
+// function converts a cstring to float value, if you need an int just cast it afterwards
+float cstof(std::string strn) {
+	std::stringstream convert;
+	convert << strn;
+	float number; 
+	convert >> number;
+	return number;
+}
+
 void strPrint(str_v vector) {
 
 	printf("[ ");
@@ -107,28 +116,22 @@ void strPrint(str_v vector) {
 
 int factor() {
 	
+	return 0;			// just put this here for now
 }
 
 int term() {
 
+	return 0;			// just put this here for now
 }
 
 int expr() {
-	return term() * factor();
+
+	return term();
 }
 
 int var() {
 	// set this equal to something 
-	expr();
-}
-
-// function converts a cstring to float value, if you need an int just cast it afterwards
-float cstof(std::string strn) {
-	std::stringstream convert;
-	convert << strn;
-	float number; 
-	convert >> number;
-	return number;
+	return expr();
 }
 
 // convert this to a state machine
@@ -220,11 +223,13 @@ int switchTable(int token) {
 	}
 
 	lastToken = token;
+
+	return 0;			// just put this here for now
 }
 
-int stateMachine(int token) {
+/*int stateMachine(int token) {
 	//case
-}
+}*/
 
 int parse(int_v tokens, str_v lexemes) {
 
@@ -250,7 +255,7 @@ int parse(int_v tokens, str_v lexemes) {
 	}
 
 
-	printf("----------------------------------------------------------------\n");
+	printf("----------------------------------------------------------------\n\n");
 
 	return 0;
 }
@@ -258,7 +263,6 @@ int parse(int_v tokens, str_v lexemes) {
 /*
 int main() {
 
-	/*
 	int arrayLength = sizeof(token_name_array) / sizeof(char);
 
 	for(int i = 0; i < arrayLength; i++) {
@@ -272,7 +276,7 @@ int main() {
 
 
 	//int me = mine.length();
-	/*for(int i = 0; i < 10000; i++) {
+	for(int i = 0; i < 10000; i++) {
 		//mine.push(rand() % 1000 + 1);
 		//mine.push(i);
 
@@ -286,7 +290,7 @@ int main() {
 	//printf("\n\n");
 
 
-	/*file_reader = fopen("tokens", "r");
+	file_reader = fopen("tokens", "r");
 	//file_writer = fopen("tokens", "w");
 	char nextChar = getc(file_reader);
 
