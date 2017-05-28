@@ -121,6 +121,7 @@ void strPrint(str_v vector) {
 
 void factor() {
 	printf("<factor>");
+	printf("   globalTokens[iterator]: %d\n", globalTokens[iterator]);
 
 	if(globalTokens[iterator] == VAR || globalTokens[iterator] == INT) {
 		iterator++;
@@ -154,7 +155,7 @@ void term() {
 
 void expr() {
 	printf("<expr>");
-	iterator++;
+	//iterator++;
 	term();
 
 	while(globalTokens[iterator] == ADD_OP || globalTokens[iterator] == SUB_OP) {
